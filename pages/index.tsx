@@ -23,17 +23,19 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
             height={35}
             layout={`responsive`}
             objectFit="cover"
-            className={`rounded-3xl`}
+            className={`absolute top-0 left-0 rounded-3xl`}
           />
           <span
             onClick={() => router.push('/about')}
-            className={`cursor-pointer absolute bottom-32 font-extrabold italic text-white md:text-6xl text-center w-full drop-shadow-lg`}
+            className={`cursor-pointer absolute top-0 font-extrabold italic text-white md:text-6xl 
+                        text-center w-full h-full drop-shadow-lg mt-16`}
           >
             {metadata.title}
           </span>
           <span
             onClick={() => router.push('/about')}
-            className={`cursor-pointer absolute bottom-20 font-extrabold text-white md:text-2xl w-full text-center drop-shadow-lg`}
+            className={`cursor-pointer absolute top-0 font-extrabold text-white md:text-2xl 
+                        w-full h-full text-center drop-shadow-lg mt-30 mt-36`}
           >{metadata.description}</span>
         </div>
 

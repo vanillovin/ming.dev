@@ -12,7 +12,7 @@ const Nav = () => {
           <a
             className={`
               mr-5 transition-all
-              ${router.pathname !== nav.link && 'hover:text-amber-200'} 
+              ${router.pathname !== nav.link && 'hover:text-amber-200 hover:dark:text-violet-200'} 
               ${router.pathname === nav.link && 'font-bold text-amber-400'}
             `}
           >
