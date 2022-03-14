@@ -1,11 +1,13 @@
 import Head from "next/head";
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import Nav from "./Nav";
 import metadata from '../data/metadata';
 import ThemeChanger from './ThemeChanger';
 
 const Container = (props) => {
+  const router = useRouter();
   const meta = {
     title: metadata.title,
     description: metadata.description,
@@ -21,9 +23,9 @@ const Container = (props) => {
         <meta property="og:site_name" content={meta.author} />
       </Head>
       <header
-        className={`w-full max-w-3xl flex flex-row justify-between items-center my-1`}
+        className={`w-full max-w-3xl flex flex-row justify-between items-center my-1 select-none`}
       >
-        <div className={`flex flex-row items-center align-middle`}>
+        <div className={`flex flex-row items-center align-middle cursor-pointer`}>
           <Image
             src={`/static/logo-light.jpg`}
             alt="로고"
@@ -31,6 +33,7 @@ const Container = (props) => {
             height={40}
             objectFit={`cover`}
             className={`rounded-full`}
+            onClick={() => router.push('/')}
           />
           <ThemeChanger />
         </div>
