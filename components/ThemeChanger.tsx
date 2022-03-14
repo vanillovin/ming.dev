@@ -1,11 +1,11 @@
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 
-const Button = ({ name, setTheme }) => {
+const Button = ({ name, onClick }) => {
   return (
     <button
       className="flex flex-row items-center justify-center hover:animate-spin"
-      onClick={() => setTheme('light')}
+      onClick={onClick}
     >
       <Image
         alt={name}
@@ -21,10 +21,10 @@ const ThemeChanger = () => {
   const { theme, setTheme } = useTheme();
   
   return (
-    <div className={`ml-2`}>
+    <div className={`ml-3`}>
       {theme === 'dark'
-        ? <Button name='moon' setTheme={() => setTheme('light')} />
-        : <Button name='sun' setTheme={() => setTheme('dark')} />
+        ? <Button name='moon' onClick={() => setTheme('light')} />
+        : <Button name='sun' onClick={() => setTheme('dark')} />
       }
     </div>
   )
