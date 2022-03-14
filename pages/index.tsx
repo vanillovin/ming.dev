@@ -28,14 +28,14 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
           <span
             onClick={() => router.push('/about')}
             className={`cursor-pointer absolute top-0 font-extrabold italic text-white md:text-6xl 
-                        text-center w-full h-full drop-shadow-lg mt-16`}
+                        text-center w-full h-full drop-shadow-lg pt-20`}
           >
             {metadata.title}
           </span>
           <span
             onClick={() => router.push('/about')}
             className={`cursor-pointer absolute top-0 font-extrabold text-white md:text-2xl 
-                        w-full h-full text-center drop-shadow-lg mt-30 mt-36`}
+                        w-full h-full text-center drop-shadow-lg pt-40`}
           >{metadata.description}</span>
         </div>
 

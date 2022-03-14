@@ -8,17 +8,17 @@
   .dark h3,
   .dark h4,
   .dark h5 {
-    color: theme(colors.gray.100);
+    color: theme(colors.gray.200);
   }
   .dark p,
   .dark li {
-    color: theme(colors.gray.200);
+    color: theme(colors.gray.300);
   }
   .dark a {
-    color: theme(colors.violet.400)
+    color: theme(colors.violet.500)
   }
   .dark pre {
-    border: 1px solid theme(colors.violet.200);
+    border: 1px solid theme(colors.violet.300);
   }
 }
 
