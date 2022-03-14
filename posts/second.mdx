@@ -1,11 +1,45 @@
 ---
-title: second
+title: Next.js로 나만의 블로그 만들기 with 미량님
 date: 2022-03-13
-description: description
+description: Next.js 와 tailwind를 사용해 정적 블로그 만들기
 ---
 
 ## 제목
 
-- 내용 1
-- 내용 2
-- 내용 3
+오늘 Next.js로 나만의 블로그 만들기 핸즈온 세션을 참가해서 나의 개인 사이트를 만들었다.
+[miryang.dev](https://miryang.dev/blog/build-blog-with-nextjs)와 
+[Github Repo](https://github.com/MiryangJung/Build-Own-blog-With-Next.js)를 참고해서 
+기능을 더 추가하고 조금 꾸민 다음 vercel로 배포까지 했다!
+
+
+## 다크 모드
+
+nextjs + tailwind로 어떻게 만드는지 찾아보다 next-themes를 사용해서 구현했다. 
+
+> 참고
+[https://github.com/pacocoursey/next-themes](https://github.com/pacocoursey/next-themes)
+[https://darrenwhite.dev/blog/nextjs-tailwindcss-theming](https://github.com/pacocoursey/next-themes)
+
+다크 모드일 때 디테일 색상을 base styles로 적용했는데 맞는지는 모르겠다 ㅎ
+```css
+// styles/globals.css
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5 {
+    color: theme(colors.gray.100);
+  }
+  ...
+```
+
+귀찮으니 오늘은 여기까지 정리 ;)
+
+[contentlayer](https://github.com/contentlayerdev/contentlayer)는 마크다운을 데이터 형태로 만들어주는 라이브러리라는데 신기했다.
+SEO도 그렇고 Typescript도 아직 많이 부족한데 nextjs에 적용하려면 열심히 공부해야겠다..!
