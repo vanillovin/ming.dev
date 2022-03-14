@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 const Nav = () => {
   const router = useRouter();
-  console.log('Nav router', router.pathname);
   
   return (
     <nav>
@@ -13,8 +12,8 @@ const Nav = () => {
           <a
             className={`
               mr-5 transition-all
-              ${router.pathname !== nav.link && 'hover:text-violet-200'} 
-              ${router.pathname === nav.link && 'font-bold text-violet-400'}
+              ${router.pathname !== nav.link && 'hover:text-amber-200'} 
+              ${router.pathname === nav.link && 'font-bold text-amber-400'}
             `}
           >
             {nav.title}

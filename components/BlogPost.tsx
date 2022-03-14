@@ -11,8 +11,8 @@ const BlogPost = ({ date, title, des, slug }) => {
             day: 'numeric',
           })}
         </div>
-        <div className={`font-extrabold text-2xl mt-2`}>{title}</div>
-        <div className={`font-medium text-gray-600 text-xl mt-1`}>{des}</div>
+        <div className={`dark:text-gray-200 font-extrabold text-2xl mt-2`}>{title}</div>
+        <div className={`text-gray-400 font-medium text-xl mt-1`}>{des}</div>
       </a>
     </Link>
   );

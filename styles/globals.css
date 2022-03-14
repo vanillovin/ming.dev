@@ -2,7 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-/* :root {
+@layer base {
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5 {
+    color: theme(colors.gray.100);
+  }
+  .dark p,
+  .dark li {
+    color: theme(colors.gray.200);
+  }
+  .dark a {
+    color: theme(colors.violet.400)
+  }
+  .dark pre {
+    border: 1px solid theme(colors.violet.200);
+  }
+}
+
+/* html,
+body {
+  color: #000;
+  background: #fff;
+}
+
+[data-theme='dark'],
+[data-theme='dark'] body {
+  color: #fff;
+  background: #000;
+}
+
+:root {
   --background: theme('colors.white');
   --background-secondary: theme('colors.gray.50');
 
