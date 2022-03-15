@@ -1,6 +1,6 @@
 const metadata = {
   meta: {
-    url: 'https://ming.dev',
+    url: 'https://ming-dev.vercel.app/',
     title: 'Ming | Developer'
   },
   title: "Ming Blog",

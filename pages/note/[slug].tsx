@@ -31,10 +31,7 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params }) => {
-  console.log('getStaticProps params', params);
   const post = allNotes.find(p => p.slug === params.slug)
-  console.log('getStaticProps post', post);
-  
   return {
     props: {
       post,

@@ -9,7 +9,7 @@ import ThemeChanger from './ThemeChanger';
 const Container = (props) => {
   const router = useRouter();
   const meta = {
-    title: metadata.title,
+    title: metadata.meta.title,
     description: metadata.description,
     author: metadata.author,
     ...props.customMeta,
