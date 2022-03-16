@@ -105,3 +105,32 @@ body {
   font-family: '', sans-serif;
 }
 ```
+
+## 반응형
+[Customizing Screens](https://tailwindcss.com/docs/screens)
+
+```js:tailwind.config.js
+module.exports = {
+  theme: {
+    screens: {
+      'sm': '320px', // 320px — 480px: Mobile devices.
+      // => @media (min-width: 320px) { ... }
+      'md': '768px', // 481px — 768px: iPads, Tablets.
+      // => @media (min-width: 768px) { ... }
+      'lg': '1024px', // 769px — 1024px: Small screens, laptops.
+      // => @media (min-width: 1024px) { ... }
+      'xl': '1280px', // 1025px — 1200px: Desktops, large screens.
+      // => @media (min-width: 1280px) { ... }
+      '2xl': '1536px', // 1201px and more — Extra large screens, TV.
+      // => @media (min-width: 1536px) { ... }
+    },
+  }
+}
+```
+
+tailwind 반응형 너무 간편하다,,🤩
+```tsx
+<div className="sm:text-sm md:text-base lg:text-xl">
+  <!-- ... -->
+</div>
+```

@@ -7,11 +7,13 @@ const SearchForm = ({onChange}) => {
           type="text"
           onChange={onChange}
           placeholder="Search articles"
-          className={`w-full px-4 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl hover:border-amber-400 
-                    dark:hover:border-violet-400 outline-none dark:text-gray-100 dark:bg-gray-800 dark:border-gray-800`}
+          className={`
+            w-full px-3 py-2 text-gray-900 bg-white border border-gray-200 rounded-xl hover:border-amber-400 
+          dark:hover:border-violet-400 outline-none dark:text-gray-100 dark:bg-gray-800 dark:border-gray-800 text-sm md:text-base
+          `}
         />
         <svg
-          className="absolute w-5 h-5 text-gray-400 right-3 top-3 dark:text-gray-300"
+          className="absolute right-2 top-2 w-5 h-5 text-gray-400 md:right-3 md:top-3 dark:text-gray-300"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

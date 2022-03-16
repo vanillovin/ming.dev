@@ -23,15 +23,18 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
             objectFit="cover"
             className={`absolute top-0 left-0 rounded-3xl`}
           />
-          <span
-            className={`absolute top-0 font-extrabold italic text-white md:text-6xl 
-                        text-center w-full h-full drop-shadow-lg pt-20`}
-          >
-            {metadata.title}
-          </span>
-          <span className={`absolute top-0 font-extrabold text-white md:text-2xl 
-                            w-full h-full text-center drop-shadow-lg pt-40`}
-          >{metadata.description}</span>
+          <div className={`absolute top-0 left-0 w-full h-full flex flex-col items-center align-middle justify-center`}>
+            <span
+              className={`block font-extrabold italic text-white text-3xl md:text-6xl drop-shadow-lg`}
+            >
+              {metadata.title}
+            </span>
+            <span className={`
+              block font-extrabold text-white text-sm md:text-2xl text-center drop-shadow-lg md:mt-4`
+            }>
+              {metadata.description}
+            </span>
+          </div>
         </div>
 
         <RecentPosts posts={posts} />

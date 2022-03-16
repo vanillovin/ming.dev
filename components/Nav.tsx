@@ -1,24 +1,37 @@
-import navlinks from "../data/navlinks";
-import Link from "next/link";
+import cn from 'classnames';
+import NextLink from "next/link";
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-const Nav = () => {
+import navlinks from "../data/navlinks";
+import MobileMenu from './MobileMenu';
+
+function NavItem({ href, text }) {
   const router = useRouter();
-  
+  const isActive = router.asPath === href;
+
   return (
-    <nav>
-      {navlinks.map((nav) => (
-        <Link href={nav.link} key={nav.title}>
-          <a
-            className={`
-              mr-5 transition-all
-              ${router.pathname !== nav.link && 'hover:text-amber-200 hover:dark:text-violet-200'} 
-              ${router.pathname === nav.link && 'font-bold text-amber-400 dark:text-violet-400'}
-            `}
-          >
-            {nav.title}
-          </a>
-        </Link>
+    <NextLink href={href}>
+      <a
+        className={cn(
+          isActive
+            ? 'font-semibold text-amber-400 dark:text-violet-400'
+            : 'font-normal text-gray-600 dark:text-gray-400',
+          'hidden md:inline-block p-1 sm:px-3 sm:py-2 hover:text-amber-200 dark:hover:text-violet-200 transition-all'
+        )}
+      >
+        <span className="capsize">{text}</span>
+      </a>
+    </NextLink>
+  );
+}
+
+const Nav = () => {  
+  return (
+    <nav className="relative">
+      <MobileMenu />
+      {navlinks.map(nav => (
+        <NavItem key={nav.title} href={nav.link} text={nav.title} />
       ))}
     </nav>
   );

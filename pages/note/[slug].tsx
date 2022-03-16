@@ -15,8 +15,12 @@ const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Container customMeta={customMeta}>
       <div className="mt-10 prose w-full max-w-3xl">
-        <h1 className="text-gray-700 text-3xl dark:text-gray-300 mb-2">{post.title}</h1>
-        <p className="text-gray-700 dark:text-gray-300 mt-0 text-sm">{post.date.substring(0, 10)}</p>
+        <span className="block font-bold text-gray-700 text-3xl dark:text-gray-300">
+          {post.title}
+        </span>
+        <span className="block text-gray-700 dark:text-gray-300 text-sm -mt-6">
+          {post.date.substring(0, 10)}
+        </span>
         <MDXComponent />
       </div>
     </Container>

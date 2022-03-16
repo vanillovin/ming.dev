@@ -148,7 +148,7 @@ pre {
 }
 
 .rehype-code-title {
-  @apply px-5 py-2 font-mono text-sm font-semibold text-gray-800 bg-gray-200 border border-b-0 border-gray-200 rounded-t-md dark:text-gray-200 dark:border-gray-700 dark:bg-gray-800;
+  @apply px-4 py-2 font-mono text-sm font-semibold text-gray-800 bg-gray-200 border border-b-0 border-gray-200 rounded-t-md dark:text-gray-200 dark:border-gray-700 dark:bg-gray-800;
 }
 
 .rehype-code-title + pre {

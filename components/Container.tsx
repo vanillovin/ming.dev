@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import Nav from "./Nav";
+// import Footer from './Footer';
 import metadata from '../data/metadata';
 import ThemeChanger from './ThemeChanger';
 
@@ -23,7 +24,7 @@ const Container = (props) => {
         <meta property="og:site_name" content={meta.author} />
       </Head>
       <header
-        className={`w-full max-w-3xl flex flex-row justify-between items-center my-1 select-none`}
+        className={`relative w-full max-w-3xl flex flex-row justify-between items-center my-1 select-none`}
       >
         <div className={`flex flex-row items-center align-middle cursor-pointer`}>
           <Image
@@ -39,7 +40,10 @@ const Container = (props) => {
         </div>
         <Nav />
       </header>
-      <main className={`w-full max-w-3xl`}>{props.children}</main>
+      <main className={`w-full max-w-3xl`}>
+        {props.children}
+        {/* <Footer /> */}
+      </main>
     </div>
   );
 };

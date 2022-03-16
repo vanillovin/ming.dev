@@ -25,7 +25,7 @@ const Search = ({ type, posts }) => {
         ))}
       </div>
       {!filteredPosts.length && (
-        <p className="ml-1 text-gray-600 dark:text-gray-400">
+        <p className="ml-1 text-gray-600 dark:text-gray-400 text-sm md:text-base">
           No posts found.
         </p>
       )}
