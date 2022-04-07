@@ -1,11 +1,53 @@
 ---
-title: note title
-date: 2022-03-15
-description: description!
+title: "[Web] API, HTTP API, REST API"
+date: 2022-04-07
+description: "API 그리고 HTTP API 와 REST API 차이"
 ---
 
-## 제목
+## API(Application Programming Interface)
+프로그램들이 서로 상호작용하는 것을 도와주는 매개체
+- 스마트폰의 터치 기능과 홈버튼
+- 고객 ↔ 점원(API) ↔ 주방요리사
 
-- 내용 1
-- 내용 2
-- 내용 3
+
+## HTTP API
+HTTP를 사용해서 서로 정해둔 스펙으로 데이터를 주고 받으며 통신하는 것
+
+
+## REST(Representational State Transfer)
+REST는 네트워크 아키텍처 원리의 모음으로, 네트워크 아키텍처의 제약 조건을 준수하는 애플리케이션 프로그래밍 인터페이스
+'네트워크 아키텍처 원리'란 네트워크 자원을 정의하고 처리하는 방법 전반을 일컫는다.
+
+### REST 구성 요소
+- 자원(RESOURCE) : URL
+- 행위(Verb) : HTTP Method - GET/POST/DELETE/PUT
+- 표현(Representation of Resource): JSON, XML 등 형태를 이용한 표현
+
+### REST 특징
+1. Server-Client 구조
+2. Stateless(무상태)
+3. Cacheable(캐시 처리 가능)
+4. Layered System(계층화)
+5. Code-On-Demand
+6. Uniform Interface(인터페이스 일관성)
+
+## REST API
+REST 기반으로 서비스 API를 구현하는 것. 어떤 식으로 정보를 주고 받고 업데이트하고 삭제할 건지 정해 놓은 것
+<img src="/posts/note/first/rest-api.png" alt="rest api" width="600"></img>
+
+### REST API 디자인 가이드
+1. URL는 정보의 자원을 표현해야 한다.
+2. 자원에 대한 행위는 HTTP Method(GET, POST, PUT, DELETE)로 표현한다.
+
+### REST API 4가지 가이드 원칙
+- 자원의 식별
+- 메시지를 통한 리소스 조작
+- 자기서술적 메서지
+- 애플리케이션의 상태에 대한 엔진으로서 하이퍼미디어
+
+이런 제약 조건들을 완벽하게 지키면서 개발하는 것을 RESTful API라고 한다.
+
+> 참고<br />
+[https://bentist.tistory.com/37](https://bentist.tistory.com/37)<br />
+[https://ko.wikipedia.org/wiki/REST](https://ko.wikipedia.org/wiki/REST)<br />
+[https://gmlwjd9405.github.io/2018/09/21/rest-and-restful.html](https://gmlwjd9405.github.io/2018/09/21/rest-and-restful.html)
