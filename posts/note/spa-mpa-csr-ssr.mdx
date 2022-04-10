@@ -1,0 +1,60 @@
+---
+title: SPA/MPA, CSR/SSR
+date: 2022-04-10
+description: description
+---
+
+## SPA(Single Page Application)
+- 한 개(Single)의 페이지(HTML 문서)로 구성된 Application
+- CSR(Client Side Rendering) 방식으로 렌더링한다.
+- 초기 렌더링 후 데이터를 받아와 필요한 부분만 갱신하기 때문에 상대적으로 서버 요청이 적고 
+자연스러운 페이지 이동으로 사용자 친화적이다. (SPA ≠ CSR)
+
+
+## MPA(Multiple Page Application)
+- 여러 개의 Page로 구성된 Application으로 전통적인 웹 애플리케이션 개발 방식
+- SSR(Server Side Application) 방식으로 렌더링한다.
+
+---
+
+## CSR(Client Side Rendering)
+<img alt="csr" src="/posts/note/spa-mpa-csr-ssr/CSR.png"></img>
+렌더링이 클라이언트 쪽에서 일어난다. 최초 요청 시에 HTML, CSS, JS 등 각종 리소스를 받아오고 이후에 
+서버에 데이터 요청을 한다. 초기 요청 때 SSR 보다 많은 리소스를 요청하기 때문에 렌더링 속도는 SSR이 더 빠름
+
+### CSR의 장점
+- 자연스러운 사용자 경험(UX)
+- 필요한 리소스만 부분적으로 로딩해 성능상 좋음
+
+### CSR의 단점
+- 검색 엔진 최적화(SEO)가 취약하다
+- JS 파일을 번들링해 한 번에 받기 때문에 초기 구동 속도가 느려 사용자가 첫 화면을 보기까지 시간이 오래 걸린다
+
+
+## SSR(Server Side Rendering)
+<img alt="ssr" src="/posts/note/spa-mpa-csr-ssr/SSR.png"></img>
+서버에서 렌더링을 마치고 data가 결합된 완전한 HTML 파일을 받아 클라이언트에 전달하는 방식
+
+### SSR의 장점
+- 빠른 초기 로딩
+- 검색엔진 최적화에 유리
+
+### SSR의 단점
+- 페이지를 요청할 때마다 새로고침 돼서 사용자 경험이 떨어짐
+- 서버가 모든 리소스를 준비해 응답하므로 서버측 부하가 증가함
+
+## 언제 어떤 방식을 쓰는 게 좋을까?
+### CSR 사용을 고려
+- 네트워크 상태가 빠를 때
+- 더 나은 사용자 경험, 고객의 데이터 보호가 중요
+- 사용자에게 보여줘야 하는 데이터의 양이 많을 때
+
+### SSR 사용을 고려
+- 네트워크 상태가 느릴 때
+- 웹사이트 상호작용이 별로 없을 때
+- 상위 노출이 필요하거나 페이지마다 데이터 변경이 많다면
+
+
+> 참고<br/>
+[https://proglish.tistory.com/216](https://proglish.tistory.com/216)<br/>
+[https://miracleground.tistory.com/165](https://miracleground.tistory.com/165)<br/>
