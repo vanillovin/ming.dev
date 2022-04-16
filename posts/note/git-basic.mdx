@@ -1,0 +1,353 @@
+---
+title: [Git] 기본 명령어 정복하기
+date: 2022-04-15
+description: 드림코딩 Git 마스터 과정 강의 매일 한 챕터씩!
+---
+
+## 기본 명령어 정복하기 😊
+### 깃의 중요한 컨셉 이해하기
+#### Git Workflow
+- local
+  - working directory : 프로젝트 파일들을 수정 작업하는 곳
+    - untracked : 새로 만들어지거나 기존에 존재하던 트레킹 되지 않는 파일
+    - tracked : Git이 이미 알고 있는 트래킹하고 있는 파일들로, 지금 이 시점에 수정이 되었는지 유무에 따라
+    수정이 되지 않거나(unmodified) 수정이 된(modified) 두 가지로 나누어 볼 수 있음
+  - staging area : 버전 히스토리에 저장할 준비가 되어있는 파일들을 옮겨놓는 곳
+  - .git directory(repository) : 버전의 히스토리를 가지고 있는 곳
+
+git dirrectory에 저장된 버전들은 checkout 명령어를 이용해 원하는 버전으로 돌아갈 수 있음
+
+- remote
+  - Github와 같은 서버에 push 명령어를 이용해 서버에 업로드
+  - pull 명령어를 이용해 서버에서 다시 로컬로 다운 
+
+각각의 commit에는 스냅샷 된 정보들을 기반으로 한 고유한 해쉬코드가 부여됨.
+이 아이디를 사용해 어떤 버전인지 누가 작성했는지 등의 버전 정보를 참조할 수 있음
+
+### 로컬 파일들 추가하기 add
+echo 는 도스, OS/2, 유닉스 및 유닉스 계열 운영 체제에서 문자열을 컴퓨터 터미널에 출력하는 명령어로 간단한 파일을 생성할 수 있음
+([위키백과](https://ko.wikipedia.org/wiki/Echo_(%EB%AA%85%EB%A0%B9%EC%96%B4)))
+```bash
+// hello world! 문자열을 a.txt 파일에 저장
+echo hello world! > a.txt
+```
+
+현재 파일의 상태들 확인
+```bash
+git status
+```
+
+untracked 된 파일을 트래킹 할 수 있도록 staging area에 옮기기
+```bash
+git add a.txt
+
+// 존재하는 txt 로 끝나는 모든 파일 추가
+git add *.txt
+```
+
+디렉토리에 있는 모든 파일들 staging area로 옮기기
+```
+// .gitignore 파일에 있는 파일들도 stage로 올리는 것
+git add *
+
+// .gitignore 파일에 있는 파일명들은 제외하고 올리는 것
+git add .
+```
+
+Staging area에서 working directory로 옮기기. untracked 된 상태로 돌아옴
+```bash
+git rm --cached *
+```
+
+### 절대 추가 하면 안되는 아이들 ignore
+빌드 안에 부수적으로 생긴 파일들 등 Git과 Github에 포함하고 싶지 않은 경우. git ignore 파일에 추가하면 트래킹 하지 않음
+```
+// .gitignore
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+log.log
+build/
+build/*.log
+```
+
+### 현재 상태 확인하기 status
+git status 라는 명령어는 우리가 작업하고 있는 모든 내용들을 간단하게 확인해 볼 수 있음
+```bash
+// 함께 실행할 수 있는 모든 옵션들에 대해 알아보기
+git status -h
+
+// 기본적으로 --long 옵션이 적용됨
+git status
+
+// -s, --short 조금 더 간단하게 확인
+git status -s
+
+// -b, --branch branch에 관련된 정보들을 확인
+git status -b
+```
+
+### 파일 비교하기 diff
+git status는 어떤 파일이 수정됐고 staging area에 있는지 확인할 수 있지만
+정확히 어떤 내용이 수정이 되었는지 확인할 수 없음 이럴 때 이용
+
+```bash
+// option이 없으면 working directory에 있는 것만 비교
+git diff
+
+// 키보드 Q로 종료!
+
+// cat 파일 내용 출력하기
+cat c.txt
+
+// Staging area에 있는 것을 확인
+git diff --staged
+
+// -h 사용할 수 있는 옵션들 보기
+git diff -h
+
+// git config에 글로벌로 설정돼 있는 아이들을 에디터 모드로 열기
+git config --global -e
+
+// vscode 에서 실행
+git difftool
+git difftool --staged
+```
+
+### 버전 등록하기 commit
+Staging area에 있는 변경사항을 Git repository에 옮겨 버전을 만들 때 이용하는 명령어
+
+```bash
+// 옵션이 없으면 타이틀과 디스크립션을 작성할 수 있는 기본적인 템플릿이 나옴
+git commit
+
+// 히스토리 확인
+git log
+
+// -m 커밋 메시지를 바로 입력
+git commit -m "first commit"
+```
+
+내 working directory에 있는 모든 변경사항이 마음에 들어 add + commit 묶기
+```bash
+git commit -am "second commit"
+```
+
+### 커밋할때 팁
+Git repository에 어떤 규모의 commit을 해나가는 것이 적당? .git directory에 있는 commit 들은
+우리의 작업대를 버전별로 나누어 관리할 수 있는 유용한 히스토리 창고 같은 아이로,
+어플리케이션을 조금 더 세분화해서 기능별로 "작은 단위"로 만들어 나가는 것이 중요! (커다란 코끼리 x)
+
+히스토리를 바라봤을 때 작업한 내용을 빠르게 확인할 수 있도록 조금 더 의미 있는 이름을 지정해서 저장하기. 
+(ex. Commit1 → Add LoginService module, Add About page, Add light theme)
+
+보통 commit 메시지는 현재형과 init, add, fix 이런 동사들로 만들어짐. 그리고 크래쉬를 고쳤다면 
+고친 내용만 포함해야지 다른 버그도 고치고 리팩토링도 하고 새로운 기능도 넣으면 혼동이 오므로
+해당하는 그 내용만 포함해 커밋.
+
+커밋은 너무 크지도 너무 작지도 않게 의미있는 단위로 나눠서!
+
+### 파일 변경시 유용한 팁
+Git에서 제공하는 명령어를 이용하면 Staging area에 추가됨
+```bash
+// 파일을 삭제
+git rm style.css
+
+// 파일 이름 변경
+git mv style.css f.css
+```
+
+### 버전들 목록 보기 log
+우리의 깃 버전 히스토리를 볼 수 있는 명령어
+
+위에 있을수록 최신의 log
+```bash
+// 간단하게 commit 아이디와 누가 만들었는지 시간과 타이틀 확인
+git log
+
+// -p, --patch 변경된 파일의 내용들도 확인 
+git log -p
+
+// 간편하게 해쉬코드 앞자리 문자열과 commit 메시지 확인
+git log --oneline
+
+// 오래된 것부터 순서대로
+git log --oneline --reverse
+```
+
+Git에서 commit을 할 때, 먼저 a 을 한 다음 b 라는 commit을 만들게 되면 뒤에 commit은 이전 commit을 참고하고,
+b 커밋이 a를 가리키고 있는 포인터가 생성이 됨. 다음 c 라는 것을 commit하면 c도 이전 b를 가리킴.
+commit을 해 나가는 줄기가 master branch
+
+헤드라는 것은 지금 내가 있는 지금 바라보는 이 시점의 버전을 가리킴. 이제 막 d를 commit 했다면 head는 d를 가리킴
+```
+a ← b ← c ← d(←head) ← master
+```
+
+헤드에서 물결 모양을 쓴 다음 1을 붙이면 현재 헤드의 이전 버전을 가리키게 됨.
+```
+a(head~3 - 이전 이전 이전 부모) ← b(head~2) ← c(head~1) ← d(head) ← master
+```
+
+이렇게 만들어진 commit 들은 내가 원할 때 git checkout으로 언제든지 원하는 시점으로 돌아갈 수 있음.
+헤드는 현재 내가 보고 있는 그 commit을 가리킨다고 이해
+```bash
+// commit b로 돌아가고 싶다면 b commit의 해쉬코드 적기, 헤드는 이제 b를 가리킴
+git checkout "원하는 commit의 해쉬코드"
+```
+
+### 로그 이쁘게 만들기
+git log를 볼 때 우리가 원하는 정보를 가질 수 있도록 이쁘게 포맷팅할 수 있음
+[Git Docs](https://git-scm.com/docs/git-log)
+```bash
+// online 옵션과 비슷하지만 해쉬코드가 전부 나옴
+git log --pretty=oneline
+```
+
+원하는 방식대로 포맷 만들기
+```bash
+git log --pretty=format:""
+
+// 해쉬코드와 commit을 누가 했는지만 화긴
+git log --pretty=format:"%h %an"
+
+// commit된 date와 타이틀까지
+git log --pretty=format:"%h %an %ar %s"
+```
+
+branch 이동 후 어디서부터 어떤 commit이 이동한 branch에 해당하는지 확인
+```bash
+git log --oneline --graph --all
+
+// git log pretty format
+git log --graph --all --pretty=format:''
+
+// 명령어를 편하게 쓸 수 있게 alias 설정
+git config --global alias.hist(원하는이름) "log --graph --all ..." 
+```
+
+### 로그 심화 내용
+git log를 잘 활용할 수 있다는 것은 버전 히스토리를 빠르게 검사하고 원하는 내용을 빠르게 찾아낼 수 있기 때문에 중요!
+```bash
+// 최근 commit 중에서 세 개만 보기
+git log -3
+
+// 여러 가지를 섞어서 쓸 수 있음
+git log --oneline -3
+
+// 커밋한 사람이 ellie인 것만
+git log --author="ellie"
+
+// 지정된 날짜 이전의 commit들
+git log --before="2022-04-16"
+
+// commit 타이틀 중에서 프로젝트가 포함된 commit
+git log --grep="project"
+
+// 소스코드 컨텐츠 안에서 문자를 검색
+git log -S "about" 
+
+// -p 조금 더 자세하게
+git log -S "about" -p
+
+// git log filename 해당하는 파일별로 log 보기
+git log about.txt
+
+// 자세하게
+git log -p about.txt
+
+// 간단한 상태만
+git log -s about.txt
+
+// git log만 했을 때와 동일한 내용을 보여줌
+git log HEAD
+
+// 두 번째 떨어진 부모부터
+git log HEAD~2
+
+// 해당하는 특정 commit의 자세한 정보 확인
+git show "해당하는 해시코드 앞 6-8자리"
+
+// 커밋에 여러 가지 파일들 중 user_repository에 관련된 내용만
+git show 0asdfa:user_repository.txt
+
+// 두 가지의 해쉬코드를 이용해 git diff 활용
+git diff 3vsf1d cw4jss
+
+// 해당하는 파일의 차이점 확인
+git diff 3vsf1d cw4jss light_theme.txt
+```
+
+### 태그는 왜 필요할까? tag
+git history에 commit 들이 점점 더 많아지기 시작하면 git log가 길어지고 특정 부분으로 돌아가기 어려울 수 있음.
+내가 특정한 commit을 북마크 해두고 싶을 때 쓸 수 있는 것이 바로 git tag로 원하는 부분으로 빠르게 전환할 수 있으며,
+대부분의 경우에는 제품을 릴리즈 할 때 그 버전을 tag 함
+
+대부분은 소프트웨어 릴리즈 버전 넘버에 대한 네이밍 시스템인 
+[semantic versioning](https://spoqa.github.io/2012/12/18/semantic-versioning.html) 시스템을 따라감.
+
+숫자 세 가지를 이용해 major, minor, fix 버전을 구분해서 정함
+- major : 어떤 특정한 기능이 추가되었을 때 전체적인 업데이트가 발생했을 때
+- minor : 그 커다란 기능 중에서 조금의 기능이 업데이트되거나 개선이 되었을 때
+- fix : 기존에 존재하는 기능에서 오류수정을 했을 때 성능이 좋게 개선됐을 때
+```
+  major   minor    fix
+v   2   .   0   .   0
+```
+
+어떤 규칙을 사용하느냐가 아니라 얼마나 의미있게 일관적으로 사용하는지가 중요
+
+### 태그 데모
+```bash
+// git tag 원하는이름
+git tag lala
+git tag v2.0.0
+
+// 특정한 commit에 달기
+git tag v1.0.0 특정태그해쉬코드
+```
+
+이 버전에는 어떤 기능들이 포함 됐는지 상세하게 릴리즈 정보를 포함하고 싶다면 
+annotatedml dirwkdls -a 옵션 이용
+```bash
+git tag v1.0.1 hashcode -am ""
+or
+git tag v1.0.1 hashcode -a -m "Release note..."
+
+// tag의 이름과 메시지 등의 정보들도 확인
+git show v.1.0.1
+
+// 만들어진 모든 tag들 확인
+git tag
+
+// tag 리스트 중에 특정한 문자열이 들어있는 것만 확인
+git tag -l "v1.0.*"
+
+// 실수로 만든 tag 삭제
+git tag -d v1.0.1
+```
+
+git checkout tagname 명령어로 언제든지 이동이 가능함
+```bash
+git checkout v2.0.0
+```
+
+tag를 checkout 하면서 새로운 branch 만들기
+```bash
+git checkout -b testing v2.0.0
+```
+
+내가 만든 tag를 서버에도 업로드
+```bash
+git push origin v1.0.0
+
+// 모든 tag 서버와 싱크
+git push origin --tags
+
+// 특정한 tag를 삭제
+git push origin --delete v1.0.0
+```
