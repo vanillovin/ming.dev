@@ -1,0 +1,376 @@
+---
+title: "[Git] 브랜치의 모든 것"
+date: 2022-04-17
+description: 드림코딩 Git 마스터 과정 강의 매일 한 챕터씩!
+---
+
+## 브랜치의 모든 것 ᛘ
+### 브랜치를 왜 꼭 써야 할까?
+Git의 branch는 협업을 위해서는 필수인 아이! 따로 지정을 하지 않는 이상 master branch가 기본적으로 쓰임.
+보통 master branch는 코드가 검증이 되고 기능에 문제가 없는 정확하게 검증된 제폼에 포함돼도 되는 내용들만 포함
+
+만약 Feature A라는 새로운 기능을 개발한다고 하면 branch를 새로 만들어 commit을 해 나가는 것이 중요함.
+기능별로 리팩토링별로 또는 버그 픽스 별로 branch를 만들어서 일을 하면 동시다발적으로 다수의 branch 위에서
+다수의 개발자가 개발을 할 수 있기 때문에 병렬적으로 업무를 진행할 수 있는 큰 장점이 있음
+
+이렇게 branch 위에서 따로 개발을 하다 각 branch가 완성이 되고, 검증팀에서 검증이 완료되고, 소스코드도 리뷰가 다 됐다면
+즉 제품에 포함이 될 준비가 됐다면 master branch로 merge 할 수 있음.
+```
+             ↱  g ← h ← feature B
+a ← b ← c ← d ← master
+             ↳  e ← f ← feature A
+```
+
+전부 다 merge. merge가 완벽하게 이루어졌다면 삭제함
+```
+             ↱  g ← h ← feature B
+a ← b ← c ← d ← e ← f ← master
+```
+
+보통은 다 merge하지 않고 깔끔하게 하나의 commit으로 만들어서 master branch로 merge하고 
+회사, 프로젝트, 팀마다 선호하는 것이 다르기 때문에 그부분은 팀과 상의해서 진행
+```
+             ↱  g ← h ← feature B
+a ← b ← c ← d ← i ← master
+             ↳  i(e+f) ← feature A
+```
+
+### 브랜치 기본 사용법
+```bash
+// 현재 Repository에 있는 branch들 확인하기
+git branch
+
+// 간단하게 최신 commit들도 확인
+git branch -v
+
+// 현재 branch에 merge가 된 branch들
+git branch --merge
+
+// merge가 되지 않은 해당 branch에서? 파생된 다른 변경사항 commit이 있는 경우
+git branch --no-merged
+
+// 내 commit 안에만 branch들이 아닌 원격 Github와 같은 서버와 연결된 Repository
+// 서버에 있는 branch들의 모든 정보
+git branch -all
+
+// 내 repository가 서버에도 있어서 삭제한 것을 원격에도 업데이트
+git push origin --delete new-branch
+
+// fix를 fix-welcom으로 이름 변경
+git branch --move fix fix-welcome
+
+// 원격에도 업데이트
+git push --set-upstream origin fix-welcome
+
+// master와 test branch 사이에 로그들만 commit들만 확인
+git log master..test
+
+// 코드들도 확인
+git diff master..test
+```
+
+무언가가 새로 만들어지는 게 아니라 branchname이라는 새로운 포인터가 동일한 commit을 가리킴
+```bash
+// branch 생성
+git branch branchname
+
+// 새로 만든 branch로 이동
+git switch branchname
+git switch master
+
+// 새로운 branch를 만들고 동시에 이동
+git switch -C new-branch
+
+// branch 지우기
+git branch -d new-branch
+```
+
+checkout은 switch와 비슷한 명령어로 언제든지 원하는 버전으로 갈 수도 있고 원하는 branch로도 이동이 가능함
+```bash
+// fix라는 branch로 이동
+git checkout fix
+
+// 컨트롤 or 커맨드 + K로 깔끔하게 지우기
+
+// branch를 만들면서 바로 동시에 이동(=git switch -C)
+git checkout -b testing
+```
+
+### 머지란? fast-forward merge
+Git merge 중에서도 가장 깔끔하고 간단한 fast-foraward merges로 
+만약 master branch 에서 새로운 feature A라는 branch가 생성된 이후에 master branch의 변동사항이 없다면
+merge를 할 때 단순히 master branch가 가리키는 포인터를 d가 아닌 f로 옮겨 놓기만 하면 됨.
+```
+            ↱ e ← f ← feature A
+a ← b ← c ← d ← master
+
+// 그리고 branch를 삭제!
+            ↱ e ← f ← master 
+a ← b ← c ← d
+```
+
+단점은 히스토리에 merge가 되었다는 사실이 남지 않아서 commit 등 지저분해도 히스토리에 모든 것을 남기길 선호하는 사람이라면
+또는 좋아하는 팀이라면 따로 merge commit을 만듦
+```
+            ↱ e ← f ↖
+a ← b ← c ← d ←------ h merge commit
+                    master
+```
+
+merge를 한다는 것은 Feature A에서 작업한 내용을 master branch로 가지고 오는 것. 
+이제 master branch에는 feature-a의 내용들이 포함됨
+```bash
+git merge feature-a
+
+// 필요없는 feature-a branch 삭제
+git branch -d feature-a
+```
+
+### 머지 옵션 no-ff
+fast-forward merge를 한 경우 master branch에는 그 어떤 merge commit도 없어서 
+한 사람이 계속 commit을 해나간 것처럼 보임. 이것을 선호하지 않는 사람이 있음!
+
+feature-c branch를 만들고 commit을 하고 여기서 그냥 git merge를 이용하게 되면 feature-c braanch는
+최신 master branch에서 파생이 됐고 그 이후 master branch에는 다른 commit이 없기 때문에
+자동으로 fast-forward merge가 됨. 그런데 무조건 히스토리에 남기고 싶으면 no fastforward 옵션을 붙이기
+```bash
+git merge --no-ff feature-c
+```
+
+### 머지의 중요한 컨셉, three-way merge
+히스토리에 남는 걸 더 선호해서 새로운 commit을 만들고 싶거나 또는 fast-forward가 불가능한 상황에 사용!
+
+feature A branch가 master branch에서 파생이 된 다음에 master branch에 새로운 commit이 있다면 ff가 불가능.
+만약 master의 포인터를 f로 가리키게 된다면 g commit 변경사항을 잃어버림. 그래서 branch가 파생한
+그 원래의 branch에서 새로운 commit이 발생했다면 fast-forward는 불가능하고 Three-way merge를 이용해야 함
+```
+            ↱   e ← f ← feature A
+a ← b ← c ← d ← g 
+            ↑
+          master
+```
+
+즉 base branch인 master branch와 파생된 feature A branch의 변동 사항을 모두 합해서 merge commit을 만든 다음에
+master branch에 commit을 해야 함. 그래서 이런 경우 `git merge feature-b`라고 하면 fast-forward가 되지 않고
+master branch와 feature-b branch 동시에 묶어주는 merge commit이 만들어지고 파일을 종료하면 
+새로운 merge commit이 만들어진 걸 확인할 수 있음.
+
+그냥 git merge를 이용 시 fast-forward가 가능한 경우라면 fast-forward가 되고, 불가능하다면 merge commit이 만들어지고,
+절대 하고 싶지 않다면 git mierge 다음에 no fast-forward 옵션 넣기!
+
+### Conflict 해결 방법
+git merge를 했을 때 무언가 문제가 있어서 자동적으로 해결이 안 된 무언가가 충돌이 났을 때 발생할 수 있는데,
+즉 두 가지의 branch에서 동일한 파일을 수정한 경우 Git이 어떤 내용을 추가하고 받아들여야 되는지 혼동스러울 때
+conflict이 발생함. 이런 경우에는 우리가 직접 수정해 줘야 함
+
+- 수동으로 해결 
+  - `open main.txt` 해결하고자 하는 파일을 열고 Git에서 추가해 준 내용을 삭제.
+  겹친 내용이 둘이라면 둘 중에 하나만 선택하거나 둘 다 넣거나 conflict 해결을 위한 수정
+  - 다른 코드도 넣고 수정을 하는 등 변경사항을 넣지 않고 이것을 해결하는 것만 하기!
+- 코드의 양이 많고 복잡한 경우에는 외부 merge 툴을 이용해서 해결
+
+```bash
+// merge 취소
+git merge --abort
+
+// 취소하고 status를 보면 둘 다 수정이 됐는데 
+git status
+
+// conflict를 다 해결했다고 알려주기 위해 git add를 이용함
+git add main.txt
+
+// 모든 준비가 다 되었으니까 merge를 계속하자
+git merge --continue
+```
+
+### VS Code로 Conflict 해결하기
+diff 툴과 마찬가지로 git config에 있는 글로벌 셋팅값을 edit모드로 열어
+merge 툴도 비쥬얼스튜디오 코드를 지정해서 명령어가 실행되도록 만들기
+```bash
+git config --global -e
+```
+
+vscode가 열리면 이 4줄을 추가
+```
+// .gitconfig
+
+[merge]
+    tool = vscode
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+```
+
+git merge 후 conflict이 발생했을 때 git mergetool 명령어를 입력하면 vscode가 열리고 위에
+조그만한 버튼들로 간편하게 해결할 수 있음
+```bash
+git mergetool
+```
+
+총 4가지 옵션이 있음
+- Accep Current Change : 지금 변경된. 현재 있는 branch의 내용을 받아들이는 것
+- Accept Incoming Change : 반대쪽. 지금 merge 하고자 하는 그 branch의 변경사항을 받아들이는 것
+- Accept Both Changes : 둘 다 쓰는 거
+- Compare Changes : 간편하게 확인하고 싶을 때. Current Changes(Current branch)가 왼쪽에 있고
+mege하고자 하는 branch가 오른쪽에 있음
+
+이렇게 옵션 중에 하나를 클릭하게 되면 자동으로 변경사항이 적용됨. 저장하고 파일을 끄면 완료!
+
+git status로 확인해 보면 동일한 파일에 orig가 붙은 파일(filename.orig)이 생김. 우리가 원하는 대로 변경 사항이 적용이 됐고 
+그리고 오리지널이라고 붙은 파일은 이전에 merge conflict이 발생했을 때의 내용이 포함된 걸 볼 수 있음.
+```bash
+// 오리지널파일이 생기는 옵션 끄기
+git config --global mergetool.keepBackup false
+
+// merge 취소하고
+git merge --abort
+
+// 풀스적으로 디렉토리에 있는 것들을 정리
+git clean -fd
+```
+
+### P4Merge로 Conflict 해결하기
+vscode 만으로 해도 충분하지만 좀 더 많은 개발자들이 공통적으로 쓰는 merge 툴을 이용!
+무료로 이용할 수 있는 merge 툴이 많은데 구중에서도 많이 쓰이는 p4merge
+
+구글에서 p4merge를 검색한 다음 첫 번째 선택하고, DOWNLOAD 버튼 눌러서 운영체제 선택하고,
+다운로드 버튼 누르고 등록하는 건 skip 누르기
+
+현재 vscode mergetool이 설정돼 있으므로 다시 새로운 mergetool 추가
+```bash
+git config --global -e
+```
+
+p4merge path 지정하기. 윈도우 사용자라면 C:/Programe Files/p4merge 경로
+```
+// .gitconfig
+
+[merge]
+    tool = p4merge
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+[mergetool]
+    keepBackup = false
+[mergetool "p4merge"]
+    path = "/Applications/p4merge.app/Contentes/MacOS/p4merge"
+```
+
+이제 P4merge가 실행됨. 컨트롤 C로 종료
+```bash
+git mergetool
+```
+
+### Rebase란 무엇일까? 왜 꿀일까? 🐝
+fast-forward가 불가능한 상황에 merge commit이 히스토리에 남지 않는 것을 선호한다면
+rebase를 이용해 피할 수 있음. three-way merge와 같은 상황에 놓여있을 때 fast-forward를 할 수 있는 좋은 방법
+
+feature A의 첫 번째 commit e가 가리키고 있는 d가 파생된 커밋
+```
+            ⮮  e ← f ← feature A
+a ← b ← c ← d ← g 
+            ↑
+          master
+```
+
+e가 가리키고 있는 걸 g로 변경하게 된다면 reabse를 한다면 이 상황에선 fast-forward가 가능함
+feature A를 다시 master branch에 rebase를 해 놓은 다음 ff를 이용해서 간단하게 merge!
+```
+              rebase
+                ⮮ e ← f ← (master, feature A)
+a ← b ← c ← d ← g
+```
+
+한 가지 조심해야 되는 상황은 나 혼자서 feature A branch에서 작업을 하고 있다면 언제든지 
+rebase를 자유롭게 할 수 있지만 다른 개발자와 함께 feature A에서 작업한다면 위험할 수 있음.
+e가 가리키고 있는 포인터를 d가 아니라 g로 변경해야 하는데 이렇게 포인터의 정보를 변경하게 되면
+기존의 commit을 유지하는 것이 아님 commit은 불변의 진리. 그래서 변경사항이 발생하면 새로운 commit이 생겨서 
+나중에 Merge Conflict이 발생할 수 있음
+
+다른 개발자와 함께 branch 위에서 작업 중이고 이미 히스토리가 서버에 업로드된 경우라면
+업로드된 히스토리는 절대 rebase 하면 안 됨. 서버에 업데이트되지 않은 나의 로컬에 있는 commit에 한에서는
+rebase를 자유롭게 해도 됨.
+
+새로운 branch를 최신 master branch에 rebase를 해 놓으면 간단하게 fast-forward를 해서 merge commit을 안 만들 수 있음.
+```bash
+// feture-b branch로 이동
+git checkout feature-b
+
+// 현재 branch인 feature-b branch를 master branch에 rebase
+git rebase master
+//  이제 feature-b brnach는 최신 master branch에서 계속 파생됨
+
+// 다시 master branch로 가서
+git checkout master
+
+// merge 커맨드로 feature-b branch를 fast-forward
+git merge feature-b
+
+// merge된 모든 branch 삭제
+git branch -d feature-a
+git branch -d feature-b
+```
+
+### 브랜치들 사이에서의 Rebase팁!
+여러가지 branch를 만들고 특히 branch 위에 또 다른 branch를 만들고 여러가지를 체이닝해서 만드는 경우에 
+굉장히 유용한 rebase --onto 옵션!
+
+새로 개발하고 있는 서비스에 의존적인 UI를 만들다 서비스가 필요가 없어 UI를 master branch에 merge를 하고 싶은 경우
+```
+a ← b ← c ← d ← (master)
+            ↑
+            e ← f ← g ← (service)
+                ↑
+                h ← i ← (UI)
+```
+
+먼저 UI branch가 master branch를 가리키고 있으면 편리함
+```
+            h ← i ← (UI)
+            ↓
+a ← b ← c ← d ← (master)
+            ↑
+            e ← f ← g ← (service)
+```
+
+서비스에서 파생된 UI branch만 master branch에 rebase. 그리고 한 가지 포인트는 rebase를 하고 나면
+commit이 비슷해 보이지만 실제로는 새로 만들어진 새로운 commit이 생성되는 걸 확인할 수 있음.
+이것도 rebase와 마찬가지로 다른 개발자와 함께 일하고 있는 branch이고 서버에 이미 히스토리가 올라가 있다면
+즉 h와 i가 이미 서버에 올라가 있는 상황이라면 rebase를 쓸 때는 조심해야 함.
+```bash
+// master branch에 업데이트 할 거고 service branch에서 파생된 ui branch를 올려놓자
+git rebase --onto master service ui
+
+// 이제 fast-forward merge를 이용할 수 있음
+git checkout master
+git merge ui
+```
+
+개발을 하다 보면 master branch가 베이스인 경우는 있겠지만 다른 branach 위에 다른 branch를 만들고
+다른 거 다른 거를 계속 만들어 나가는 경우 rebase --onto 옵션이 굉장히 유용하게 쓰임!
+
+### 필요한 커밋만 쏘옥~! 🍒
+너무너무 깜찍하고 귀여운 cherry pick! 내가 service branch에서 서비스를 개발하고 있는데 
+그중에 딱 필요한 기능만 master branch에 merge를 해야 하는 경우 유용하게 사용할 수 있음
+```
+          (master)
+            ↓
+a ← b ← c ← d
+            ↑
+            e ← "f" ← g ← (service)
+```
+
+f라는 commit만 master branch에 필요하다면 유용. 이처럼 cherry pick은 내가 원하는 다른 branch에 있더라도
+원하는 commit만 쏙 가져올 수 있는 툴.
+```
+              (master)
+                 ↓
+a ← b ← c ← d ← "f"
+            ↑
+            e ← "f" ← g ← (service)
+```
+
+원하는 commit 해시코드를 복사해 이용하면 master branch 위에 이 commit만 추가됨.
+```bash
+git cherry-pick hashcode
+```
+
+branch에서 굉장히 작업 기간이 오래 걸리거나 내가 특정한 commit을 가지고 오고 싶을 때 유용하게 사용할 수 있음
