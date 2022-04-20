@@ -4,16 +4,16 @@ date: 2022-04-20
 description: 드림코딩 Git 마스터 과정 강의 매일 한 챕터씩!
 ---
 
-## 언제든 말만해! Stash의 모든것
+## 언제든 말만 해! Stash의 모든 것
 ### Stash란 무엇이고 왜 중요할까?
 내가 열심히 working directory에서 일을 하고 있고 아직 commit할 단계가 아님. 그런데 갑자기 선임이
-열심히 만든 branch가 있는데 체크아웃해서 버그가 있는지 없는지 테스트 좀 해달라고 부탁들 하면?
+열심히 만든 branch가 있는데 체크아웃해서 버그가 있는지 없는지 테스트 좀 해달라고 부탁을 하면?
 아직 commit할 단계도 아니고 준비가 되지 않았고, 변경 사항을 지우고 Branch를 전환하자니 
 여태까지 작업한 사항을 잃어버릴 거 같고.. 그럼 어떻게 하면 좋을까?!
 
 Git에는 이럴 경우를 위해 Stack처럼 아이템을 넣으면 새로운 것이 제일 위에 있어서 Pop을 할 수 있는
 Stash Stack이 존재함. 이렇게 Stash를 이용하면 Git history에 저장하지 않고도 원하는 내용들을 잠시 저장해 두고,
-다른 Branch를 체크아웃해서 확인한 다믕 다시 내가 원하는 순간에 Stash Stack에 있는 내용들을 
+다른 Branch를 체크아웃해서 확인한 다음 다시 내가 원하는 순간에 Stash Stack에 있는 내용들을 
 다시 working directory로 가지고 올 수 있음.
 
 작업하고 있는 내용들을 저장해두고 Branch 전환을 위해서 쓸 수도 있고, 
@@ -39,18 +39,18 @@ git stash push -m "second try" --keep-index
 git stash -u
 ```
 
-stash한 내용들을 확인
+stash 한 내용들을 확인
 ```bash
 git stash list
 
-// 각 stash에서 어떤 것이 수정 되었는지 확인
+// 각 stash에서 어떤 것이 수정되었는지 확인
 git stash show stash@{3} // <- id
 
 // 조금 더 자세하게
 git stash show stash@{3} -p
 ```
 
-다시 나의 업무를 하고 싶을 때. apply 다음에 아무것도 작성 하지 않으면 
+다시 나의 업무를 하고 싶을 때. apply 다음에 아무것도 작성하지 않으면 
 제일 위에 있는 가장 최근의 commit을 자동으로 apply 적용
 ```bash
 git stash list 
