@@ -1,0 +1,77 @@
+---
+title: "[Git] Stash의 모든 것"
+date: 2022-04-20
+description: 드림코딩 Git 마스터 과정 강의 매일 한 챕터씩!
+---
+
+## 언제든 말만해! Stash의 모든것
+### Stash란 무엇이고 왜 중요할까?
+내가 열심히 working directory에서 일을 하고 있고 아직 commit할 단계가 아님. 그런데 갑자기 선임이
+열심히 만든 branch가 있는데 체크아웃해서 버그가 있는지 없는지 테스트 좀 해달라고 부탁들 하면?
+아직 commit할 단계도 아니고 준비가 되지 않았고, 변경 사항을 지우고 Branch를 전환하자니 
+여태까지 작업한 사항을 잃어버릴 거 같고.. 그럼 어떻게 하면 좋을까?!
+
+Git에는 이럴 경우를 위해 Stack처럼 아이템을 넣으면 새로운 것이 제일 위에 있어서 Pop을 할 수 있는
+Stash Stack이 존재함. 이렇게 Stash를 이용하면 Git history에 저장하지 않고도 원하는 내용들을 잠시 저장해 두고,
+다른 Branch를 체크아웃해서 확인한 다믕 다시 내가 원하는 순간에 Stash Stack에 있는 내용들을 
+다시 working directory로 가지고 올 수 있음.
+
+작업하고 있는 내용들을 저장해두고 Branch 전환을 위해서 쓸 수도 있고, 
+버그를 고치면서 다른 시도를 할 때 각각의 시도를 잠시 저장해두고 싶을 때도 유용하게 쓸 수 있음
+
+
+### Stash 데모
+```bash
+// 아무것도 하지 않으면 git stash push와 동일
+git stash
+
+// 의미 있는 이름 부가
+git stash push -m "first try"
+```
+
+stash에 저장하는데 대신에 작업하고 있는 파일은 그대로 내 staging area에 두기
+```bash
+git stash push -m "second try" --keep-index
+```
+
+아직 tracking 되지 않은 파일들도 stash에 포함하고 싶다면
+```bash
+git stash -u
+```
+
+stash한 내용들을 확인
+```bash
+git stash list
+
+// 각 stash에서 어떤 것이 수정 되었는지 확인
+git stash show stash@{3} // <- id
+
+// 조금 더 자세하게
+git stash show stash@{3} -p
+```
+
+다시 나의 업무를 하고 싶을 때. apply 다음에 아무것도 작성 하지 않으면 
+제일 위에 있는 가장 최근의 commit을 자동으로 apply 적용
+```bash
+git stash list 
+
+git stash apply
+git stash apply stash@{1}
+```
+
+stash를 적용하면서 목록은 그대로 유지하고 싶다면 apply, 하나씩 가지고 나오면서 목록에서 제거하고 싶다면 pop
+```bash
+// 제일 위에 있는 내용이 working directory로 옮겨져 나옴
+git stash pop
+
+// 더 이상 필요 없는 id를 삭제하고
+git stash drop stash@{0}
+
+// 전체를 다 삭제
+git stash clear
+```
+
+지금 현재 내 branch가 아니라 stash에 있는 것들을 적용하면서 새로운 branch를 만들기
+```bash
+git stash branch newBransh
+```
