@@ -1,13 +1,12 @@
-import cn from 'classnames';
 import navlinks from 'data/navlinks';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const MobileMenu = () => {
-  const { theme } = useTheme();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme = 'light' } = useTheme();
+  const [ isMenuOpen, setIsMenuOpen ] = useState(false);
 
   return (
     <>

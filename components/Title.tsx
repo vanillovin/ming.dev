@@ -2,7 +2,7 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image'
 
 const Title = ({ title, description }: { title: string, description: string }) => {
-  const { theme } = useTheme();
+  const { theme = 'light' } = useTheme();
   return (
     <>
       <div className={`my-2 md:my-8 flex items-end justify-between`}>
