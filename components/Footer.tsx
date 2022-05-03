@@ -1,4 +1,4 @@
-import metadata from 'data/metadata'
+import metadata from 'data/metadata';
 
 const Footer = () => {
   return (
@@ -10,9 +10,11 @@ const Footer = () => {
           </a>
         )} */}
       </div>
-      <div>Copyright © {new Date().getFullYear()} {metadata.author}</div>
+      <div>
+        Copyright © {new Date().getFullYear()} {metadata.author}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

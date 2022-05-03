@@ -1,6 +1,6 @@
-import { InferGetStaticPropsType } from "next";
+import { InferGetStaticPropsType } from 'next';
 
-import Container from "../components/Container";
+import Container from '../components/Container';
 import { allNotes } from 'contentlayer/generated';
 import metadata from 'data/metadata';
 import Title from 'components/Title';
@@ -12,8 +12,8 @@ const Note = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
   };
   return (
     <Container customMeta={customMeta}>
-      <Title title='Note' description='공부한 기술들을 정리하는 곳' />
-      <Search type='note' posts={posts}/>
+      <Title title="Note" description="공부한 기술들을 정리하는 곳" />
+      <Search type="note" posts={posts} />
     </Container>
   );
 };

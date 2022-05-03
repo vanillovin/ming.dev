@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { InferGetStaticPropsType } from "next";
+import { InferGetStaticPropsType } from 'next';
 import { useTheme } from 'next-themes';
 
 import metadata from '../data/metadata';
-import Container from "../components/Container";
+import Container from '../components/Container';
 import RecentPosts from '../components/RecentPosts';
 import { allBlogs, allNotes } from 'contentlayer/generated';
 
@@ -15,7 +15,7 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
       <div className={`my-5 w-full select-none`}>
         <div className={`relative`}>
           <Image
-            src={`/home/${theme==='light' ? 'light': 'dark'}.jpg`}
+            src={`/home/${theme === 'light' ? 'light' : 'dark'}.jpg`}
             alt="대표 이미지"
             width={`100%`}
             height={35}
@@ -23,15 +23,18 @@ const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
             objectFit="cover"
             className={`absolute top-0 left-0 rounded-3xl`}
           />
-          <div className={`absolute top-0 left-0 w-full h-full flex flex-col items-center align-middle justify-center`}>
+          <div
+            className={`absolute top-0 left-0 w-full h-full flex flex-col items-center align-middle justify-center`}
+          >
             <span
               className={`block font-extrabold italic text-white text-3xl md:text-6xl drop-shadow-lg`}
             >
               {metadata.title}
             </span>
-            <span className={`
-              block font-extrabold text-white text-sm md:text-2xl text-center drop-shadow-lg md:mt-4`
-            }>
+            <span
+              className={`
+              block font-extrabold text-white text-sm md:text-2xl text-center drop-shadow-lg md:mt-4`}
+            >
               {metadata.description}
             </span>
           </div>

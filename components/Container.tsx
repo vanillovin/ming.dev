@@ -1,8 +1,8 @@
-import Head from "next/head";
+import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import Nav from "./Nav";
+import Nav from './Nav';
 // import Footer from './Footer';
 import metadata from '../data/metadata';
 import ThemeChanger from './ThemeChanger';
@@ -15,7 +15,7 @@ const Container = (props) => {
     author: metadata.author,
     ...props.customMeta,
   };
-  
+
   return (
     <div className={`w-full flex flex-col items-center p-3`}>
       <Head>
@@ -26,7 +26,9 @@ const Container = (props) => {
       <header
         className={`relative w-full max-w-3xl flex flex-row justify-between items-center my-1 select-none`}
       >
-        <div className={`flex flex-row items-center align-middle cursor-pointer`}>
+        <div
+          className={`flex flex-row items-center align-middle cursor-pointer`}
+        >
           <Image
             src={`/static/logo-light.jpg`}
             alt="로고"

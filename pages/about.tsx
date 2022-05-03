@@ -8,10 +8,10 @@ function Aboutpage() {
   };
   return (
     <Container customMeta={customMeta}>
-      <Title title='About' description='저를 소개합니다' />
+      <Title title="About" description="저를 소개합니다" />
       <div>about</div>
     </Container>
-  )
+  );
 }
 
 export default Aboutpage;

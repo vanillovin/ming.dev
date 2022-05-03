@@ -11,7 +11,7 @@ const Search = ({ type, posts }) => {
 
   return (
     <>
-      <SearchForm onChange={(e) => setSearchValue(e.target.value)} /> 
+      <SearchForm onChange={(e) => setSearchValue(e.target.value)} />
       <div className={`flex flex-col`}>
         {results.map((post) => (
           <Post
@@ -30,7 +30,7 @@ const Search = ({ type, posts }) => {
         </p>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;

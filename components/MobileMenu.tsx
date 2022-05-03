@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const MobileMenu = () => {
   const { theme = 'light' } = useTheme();
-  const [ isMenuOpen, setIsMenuOpen ] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <>
@@ -15,7 +15,7 @@ const MobileMenu = () => {
         aria-label="Toggle menu"
         type="button"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
+      >
         <Image
           alt={`menu-${theme}`}
           width={30}
@@ -29,12 +29,10 @@ const MobileMenu = () => {
           className="absolute top-14 right-0 z-10 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
         >
           <ul className="py-1" aria-labelledby="dropdownButton">
-            {navlinks.map(nav => (
+            {navlinks.map((nav) => (
               <li key={nav.title} onClick={() => setIsMenuOpen(false)}>
                 <Link href={nav.link}>
-                  <a
-                    className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
+                  <a className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                     {nav.title}
                   </a>
                 </Link>
@@ -44,9 +42,7 @@ const MobileMenu = () => {
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
-export default MobileMenu
-
-
+export default MobileMenu;
