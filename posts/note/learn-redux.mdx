@@ -1,0 +1,645 @@
+---
+title: '[Redux] 리덕스 공부 정리'
+date: 2022-05-11
+description: '리덕스 공부하고 정리하기'
+---
+
+## 6장 | 벨로퍼트와 함께 하는 모던 리액트 : Redux
+
+### 00. 소개
+
+단순히 전역 상태 관리와 global state가 별로 없다면 Context API로 충분
+
+#### Context를 쓰는 거랑 어떤 차이점?
+
+1. 미들웨어
+   미들웨어의 용도는 다양하지만 주요 사용 용도는 비동기 작업을 더욱 체계적으로 관리 가능함
+
+   <img src="/posts/note/learn-redux/Pasted image 20220510114451.png" />
+
+2. 유용한 함수와, Hooks
+   리덕스에는 전용 커스텀 훅을 만드는 이와 비슷한 것을 편리하게 해주는 여러 기능들이 존재함(connect, useSelector, useDispatch, useStord, ...)
+
+3. 기본적인 최적화가 이미 되어있다
+   필요한 상태가 바뀔 때에만 리랜더링되는 기능이 탑재돼있음
+
+4. 하나의 커다란 상태
+   Context API를 사용해 글로벌 상태를 관리하는 경우엔 기능별로 컨텍스트를 만들어 사용하는 것이 일반적이지만 리덕스트 하나의 커다란 객체에 상태를 넣어서 사용해 수고로움을 덜어줌
+
+5. DevTools. 이미 많은 프로젝트에서 사용 중임..
+
+#### 리덕스는 언제 써야 할까?
+
+- 프로젝트의 규모가 큰가? Y - Redux, N - Context API
+- 비동기 작업을 자주 하게 되나? Y - Redux & Redux middleware, N - Context API
+- 편하게 느껴지나? Y - Redux, N - Context API or MobX
+
+### 01. 리덕스에서 사용되는 키워드
+
+#### 액션 (Action)
+
+상태의 어떤 변화가 필요할 때 액션을 발생시킴. 이는 하나의 객체로 표현되는데, 액션 객체는 타입이라는 값이 필수적으로 있어야 함. 타입으로 어떻게 업데이트할지 정의함. => 어떻게 업데이트할지를 정의하는 객체
+
+```js
+{
+	type: "ADD_TODO",
+	data: {
+		id: 0,
+		text: "리덕스 배우기"
+	}
+}
+```
+
+#### 액션 생성함수 (Action Creator)
+
+액션 객체를 만들어주는 함수. 필수적이진 않지만 만들고 나면 나중에 편리하게 액션 객체를 만들 수 있음. 만약 사용하지 않는다면 액션을 발생시킬 때마다 직접 액션 객체를 작성해야 함
+
+```js
+export function addTodo(data) {
+  return {
+    type: 'ADD_TODO',
+    data,
+  };
+}
+// or arrow function
+export const addTodo = (text) => ({
+  type: 'CHANGE_INPUT',
+  text,
+});
+```
+
+#### 리듀서 (Reducer)
+
+useReducer와 비슷. 변화를 일으키는 함수로 두 개의 파라미터를 받아옴. 액션 타입을 가지고 무엇이냐에 따라 다른 업데이트 작업을 함. 중요한 건 불변성을 꼭 유지해야 함. state가 객체나 배열이면 concat, spread operator 등의 내장함수로 기존 객체나 배열을 건드리지 않고 새로운 값을 만들어 반환해야 함.
+useReducer를 사용할 때는 일반적으로 default 부분에 에러를 발생시키는데, redux reducer에서는 기존의 state를 그대로 반환하는 형태로 작성함. 왜냐면 여러 개의 리듀서를 만들고 이를 합쳐 루트 리듀서를 만들 수 있음. 루트 리듀서 안의 작은 리듀서는 서브 리듀서
+
+```js
+function counter(state, action) {
+  switch (action.type) {
+    case 'INCREASE':
+      return state + 1;
+    case 'DECREASE':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+```
+
+#### 스토어 (Store)
+
+현재 앱의 상태와 리듀서가 들어있고, 하나의 앱에선 하나의 스토어만 만든다는 규칙이 있음. 스토어 안에는 추가적으로 몇 가지 내장함수들이 들어있음
+
+- 디스패치 (dispatch)
+
+액션을 발생시킴. 액션을 스토어에게 전달한다. 액션 객체를 만들어서 파라미터에 넣어 호출. 리듀서에게 전달이 돼서 그 함수에서 새로운 상태를 반환해 주면 스토어의 상태가 새로워짐
+
+```
+dispatch({ type: 'INCREASE' })
+```
+
+- 구독 (subscribe)
+
+액션이 발생되서 상태가 업데이트됐을 때 특정 함수를 호출. 스토어의 내장 함수 중 하나로, 호출할 때 파라미터로 특정 함수로 넣으면 액션이 디스패치 될 때마다 우리가 설정한 함수가 호출됨. 그러면 스토어의 상태가 업데이트될 때마다 특정 함수를 호출할 수 있다는 것. 리액트 리덕스 라이브러리에서 제공하는 훅으로 스토어 상태가 업데이트되면 컴포넌트가 리랜더링 작업을 대신 처리할 수 있음.
+
+### 02. 리덕스의 3가지 규칙
+
+1. 하나의 애플리케이션엔 하나의 스토어가 있습니다 (여러 개의 스토어를 만드는 것은 권장 x)
+2. 상태는 읽기 전용 입니다. 즉 불변성을 지켜줘야 합니다
+3. 변화를 일으키는 함수 리듀서는 순수한 함수여야 합니다
+   <img src="/posts/note/learn-redux/Pasted image 20220510133816.png" />
+
+호출할 때마다 값이 바뀌는 함수나 값이 바뀔 수 있는 외부 변수에 의존하면 안 됨. 리듀서에서 새로운 상태를 만들 때는 파라미터로 전달받은 state, action만 의존해서 새로운 상태를 만들어야 함. 비동기 작업 등의 상황엔 해당 작업을 컴포넌트 단에서 해주거나 미들웨어를 통해서 처리
+
+```
+=> 동일한 인풋 -> 동일한 아웃풋
+
+// 이런 함수를 쓰면 안 됨
+new Date()
+Math.random()
+axios.get()
+```
+
+### 03. 리덕스 사용 준비
+
+```js
+import { createStore } from 'redux';
+
+const initialState = {
+  counter: 0,
+  text: '',
+  list: [],
+};
+
+/* Actions */
+const INCREASE = 'INCREASE';
+const DECREASE = 'DECREASE';
+const CHANGE_TEXT = 'CHANGE_TEXT';
+const ADD_TO_LIST = 'ADD_TO_LIST';
+
+/* Action Creators */
+const increase = () => ({
+  type: INCREASE,
+});
+const decrease = () => ({
+  type: DECREASE,
+});
+const changeText = (text) => ({
+  type: CHANGE_TEXT,
+  text,
+});
+const addToList = (item) => ({
+  type: ADD_TO_LIST,
+  item,
+});
+
+/**
+ * Reducer
+ * state default value 설정. 리덕스에서 초기 상태를 만들 때 reducer를 한 번 호출하는데,
+ * 그 시점에 스테이트가 undefined 면 초기 상태가 만들어지지 않음
+ */
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case INCREASE:
+      return {
+        ...state,
+        counter: state.counter + 1,
+      };
+    case DECREASE:
+      return {
+        ...state,
+        counter: state.counter - 1,
+      };
+    case CHANGE_TEXT:
+      return {
+        ...state,
+        text: action.text,
+      };
+    case ADD_TO_LIST:
+      return {
+        ...state,
+        list: [...state.list, action.item], // or state.list.concat(action.item)
+      };
+    default:
+      return state;
+  }
+}
+
+/* create store */
+const store = createStore(reducer);
+console.log(store.getState()); // 현재 store 안의 상태 조회
+// {counter: 0, text: '', list: Array(0)}
+
+/* subscribe */
+const listener = () => {
+  const state = store.getState();
+  console.log(state);
+};
+
+const unsubscribe = store.subscribe(listener);
+// unsubscribe(); // 구독 해제
+
+/* action dispatch */
+store.dispatch(increase());
+store.dispatch(decrease());
+store.dispatch(changeText('cookie'));
+store.dispatch(addToList({ id: 1, text: 'hello' }));
+
+// store instance를 console에서 사용할 수 있음
+window.store = store;
+window.unsubscribe = unsubscribe;
+```
+
+특정 액션이 디스패치되면 스토어의 상태가 업데이트되고, 상태가 업데이트되면 우리가 구독했던 함수가 호출됨. unsubscribe 하면 호출이 되지 않음. 우리가 앞으로 리액트에서 리덕스를 사용할 때는 subscribe 함수는 사용하지 않음. 그리고 getState도 직접적으로 사용하는 일은 미들웨어말고는 없음. helper hooks를 사용해 리덕스와 리액틀를 연동
+
+### 04. 리덕스 모듈 만들기
+
+#### 리덕스 모듈이란?
+
+액션 타입, 액션 생성 함수, 리듀서
+다음 항목들이 모두 들어있는 자바스크립트 파일을 의미함
+
+[redux/example github](./posts/note/learn-redux/https://github.com/reduxjs/redux/tree/master/examples) todos 프로젝트를 보면 actions와 reducers가 따로따로 있는데, 한 파일에 몰아서 작성하는 Ducks 패턴을 권장함. [Ducks 패턴의 규칙](./posts/note/learn-redux/https://github.com/erikras/ducks-modular-redux) 은 파일에 액션 타입, 액션 생성 함수, 리듀서 모두 같이 선언하는데, reducer의 경우는 export default로 내보내고 액션 생성 함수는 일반 export로 내보내줌. 이 패턴은 편하고 특히 리덕스를 배우는 과정에서 쓰면 쉽지만 분리하는 방식은 딱 정해져있지 않음.
+
+root reducer 만들기
+
+```js
+// src/modules/index.js
+
+import { combineReducers } from 'redux';
+import counter from './counter';
+import todos from './todos';
+
+const rootReducer = combineReducers({
+  counter,
+  todos,
+});
+
+export default rootReducer;
+```
+
+#### 리액트 프로젝트에 리덕스 적용
+
+1. redux를 react 앱에 연결하게 하는 라이브러리인 react-redux 패키지 설치
+
+```bash
+yarn add react-redux
+# or
+npm install react-redux
+```
+
+2. 연결
+
+```js
+// src/index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import rootReducer from './modules';
+
+const store = createStore(rootReducer);
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
+  <Provider store={store}>
+        <App /> {' '}
+  </Provider>
+);
+```
+
+### 05. 카운터 구현하기
+
+```
+src
+├── components
+│ └── Counter.jsx
+├── containers
+│ └── CounterContainer.jsx
+├── modules
+│ ├── counter.js
+│ ├── index.js
+│ └── todos.js
+├── App.js
+└── index.js
+```
+
+Presentational Component 란, 리덕스 스토어에 직접적으로 접근하지 않고 필요한 값이나 함수를 props로 받아와 사용하고 주로 UI를 선언하는 것에 집중하는 컴포넌트
+
+- Counter Presentational Component 만들기
+
+```js
+// src/components/Counter.jsx
+
+import React from 'react';
+
+function Counter({ number, diff, onIncrease, onDecrease, onSetDiff }) {
+  const onChange = (e) => onSetDiff(parseInt(e.target.value, 10));
+
+  return (
+    <>
+            <h1>{number}</h1>     {' '}
+      <div>
+                <input type="number" value={diff} onChange={onChange} />       {' '}
+        <button onClick={onIncrease}>+</button>       {' '}
+        <button onClick={onDecrease}>-</button>     {' '}
+      </div>
+         {' '}
+    </>
+  );
+}
+
+export default Counter;
+```
+
+Container Component 란, 리덕스에 있는 상태를 조회하거나 action을 dispatch 할 수 있는 컴포넌트임. 리액트 컴포넌트에서 리덕스를 연동할 때는 useSelector, useDispatch hook을 사용
+
+```js
+// src/containers/CounterContainer.jsx
+
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import Counter from '../components/Counter';
+import { decrease, increase, setDiff } from '../modules/counter';
+
+function CounterContainer() {
+  // 상태를 조회할 때는 useSelector 사용.
+  const { number, diff } = useSelector((state) => ({
+    // state는 store에서 getState를 했을 때 반환하는 객체
+    number: state.counter.number,
+    diff: state.counter.diff,
+  }));
+
+  // useDispatch는 action을 dispatch
+  const dispatch = useDispatch();
+
+  const onIncrease = () => dispatch(increase());
+  const onDecrease = () => dispatch(decrease());
+  const onSetDiff = (diff) => dispatch(setDiff(diff));
+
+  return (
+    <Counter
+      number={number}
+      diff={diff}
+      onIncrease={onIncrease}
+      onDecrease={onDecrease}
+      onSetDiff={onSetDiff}
+    />
+  );
+}
+
+export default CounterContainer;
+```
+
+```js
+// src/App.js
+
+import CounterContainer from './containers/CounterContainer';
+
+function App() {
+  return <CounterContainer />;
+}
+
+export default App;
+```
+
+<img src="/posts/note/learn-redux/Pasted image 20220510164113.png" />
+
+Container와 Presentational Components를 따로 분리해서 작성하게 되면, Presentational Component의 재사용성이 높아질 수 있고 관심사를 분리할 수 있기 때문에 유용한 패턴임.
+
+[Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) 복잡한 상태로직을 분리시키기 위함이었는데 훅스를 사용해서도 비슷한 작업을 할 수 있어서 무조건 분리하는 게 답은 아님. => 아직까진 정석이지만 자신이 편하다고 생각하는 방식을 선택!
+
+### 06. 리덕스 개발자 도구 적용하기
+
+[Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=ko) 를 사용하면 현재 스토어의 상태를 개발자 도구에서 조회하거나 어떤 액션들이 디스패치됐고 상태가 어떻게 변했는지 확인할 수 있고, 액션의 상태를 뒤로 되돌리거나 또 액션을 개발자 도구에서 바로 디스패치할 수 있음.
+
+- 프로젝트에서 패키지 설치
+
+```bash
+npm install --save redux-devtools-extension
+# or
+yarn add redux-devtools-extension
+```
+
+```js
+// src/index.js
+
+...
+import { composeWithDevTools } from 'redux-devtools-extension';
+const store = createStore(rootReducer, composeWithDevTools());
+...
+```
+
+개발자 도구에서 Redux 탭을 확인!
+
+<img src="/posts/note/learn-redux/Pasted image 20220510170815.png" />
+
+### 07. 할 일 목록 구현 - 프레젠테이셔널 컴포넌트 만들기
+
+```js
+// src/components/Todos.jsx
+
+import React, { useState } from 'react';
+
+function TodoItem({ todo, onToggle }) {
+  return (
+    <li
+      style={{
+        textDecoration: todo.done ? 'line-through' : 'none',
+      }}
+      onClick={() => onToggle(todo.id)}
+    >
+      {todo.text}
+    </li>
+  );
+}
+
+function TodoList({ todos, onToggle }) {
+  return (
+    <ul>
+           {' '}
+      {todos.map((todo) => (
+        <TodoItem key={todo.id} todo={todo} onToggle={onToggle} />
+      ))}
+         {' '}
+    </ul>
+  );
+}
+
+export default function Todos({ todos, onCreate, onToggle }) {
+  const [text, setText] = useState('');
+  const onChange = (e) => setText(e.target.value);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    onCreate(text);
+    setText('');
+  };
+
+  return (
+    <div>
+           {' '}
+      <form onSubmit={onSubmit}>
+               {' '}
+        <input
+          value={text}
+          onChange={onChange}
+          placeholder="할 일을 입력하세요.."
+        />
+                <button type="submit">등록</button>     {' '}
+      </form>
+            <TodoList todos={todos} onToggle={onToggle} />   {' '}
+    </div>
+  );
+}
+```
+
+### 08. 할 일 목록 구현 - 컨테이너 컴포넌트 만들기
+
+import 자동완성 : Ctrl + Space
+
+```js
+// src/containers/TodosContainer.jsx
+
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Todos from '../components/Todos';
+import { addTodo, toggleTodo } from '../modules/todos';
+
+function TodosContainer() {
+  const todos = useSelector((state) => state.todos);
+  const dispatch = useDispatch();
+
+  // 매번 랜더링 될 때마다 새로 만들지 않고 재사용
+  const onCreate = useCallback((text) => dispatch(addTodo(text)), [dispatch]);
+  const onToggle = useCallback((id) => dispatch(toggleTodo(id)), [dispatch]);
+
+  return <Todos todos={todos} onCreate={onCreate} onToggle={onToggle} />;
+}
+
+export default TodosContainer;
+```
+
+```js
+// src/App.js
+
+import TodosContainer from './containers/TodosContainer';
+
+function App() {
+  return <TodosContainer />;
+}
+
+export default App;
+```
+
+### 09. 할 일 목록 구현 - 컴포넌트 최적화를 위한 작업
+
+React Devtools가 업데이트됨. Profiler 선택 후 recode 누르고 입력해 보면 결과가 뜨는데, 회색은 렌더링 되지 않았다는 것을 의미하고 주황색 노란색 초록색은 됐다는 것. 초록색은 빨랐ek는 거고 노래질수록 렌더링이 오래 걸리는 것.
+
+<img src="/posts/note/learn-redux/Pasted image 20220510200601.png" />
+
+텍스트가 업데이트될 때는 투 두 리스트랑 아이템을 렌더링 할 필요가 없으므로 react memo로 최적화하기!
+
+```js
+// src/components/Todos.jsx
+
+const TodoItem = React.memo(function TodoItem({ todo, onToggle }) {
+	...
+});
+
+const TodoList = React.memo(function TodoList({ todos, onToggle }) {
+	...
+});
+
+function Todos({ todos, onCreate, onToggle }) {
+	...
+}
+
+export default React.memo(Todos);
+```
+
+지금 당장은 input에 대한 업데이트를 방지하는 것으로 memo는 이 단계에서 굳이 할 필요는 없음! input 입력 시에 TodoList를 렌더링 하지 않았음을 확인 가능
+
+<img src="/posts/note/learn-redux/Pasted image 20220510201236.png" />
+
+## 10. useSelector 최적화
+
+todo를 클릭했을 뿐인데 Counter도 리렌더링 <img src="/posts/note/learn-redux/Pasted image 20220510204543.png" />
+
+왜냐면 CounterContainer의 useSelector에 문제가 있음. state 파라미터를 가져오는 과정에서 selector가 매번 새로운 객체를 만들고 있기 때문임.
+
+```js
+function CounterContainer() {
+  const { number, diff } = useSelector(state => ({
+  ...
+```
+
+두 가지 방법이 있음. 먼저 useSelector를 여러 번 하는 것
+
+```js
+function CounterContainer() {
+  const number = useSelector(state => state.counter.number);
+  const diff = useSelector(state => state.counter.diff);
+  ...
+```
+
+두 번째 방법은 기존의 코드를 재사용하면서, useSelector의 두 번째 파라미터에 이전 상태와 다음 상태를 비교하는 함수를 만드는 것
+
+```js
+function CounterContainer() {
+  const { number, diff } = useSelector(
+    state => ({
+      number: state.counter.number,
+      diff: state.counter.diff,
+    }),
+    (left, right) => {
+      return left.diff === right.diff && left.number === right.number;
+    }
+  );
+  ...
+```
+
+만약 여기서 새로운 객체를 만든 게 아니라면, 아까처럼 하나의 값만 조회를 했다면 left가 right랑 같은지만 확인하지만 객체인 경우에는 내부의 값이 다 일치하는지 확인해야 함.
+
+```js
+function CounterContainer() {
+  const { number, diff } = useSelector(
+    state => ({
+      number: state.counter.number,
+      diff: state.counter.diff,
+    }),
+    (left, right) => {
+      return left === right;
+    }
+  );
+  ...
+```
+
+매번 이러는 것은 귀찮음. 다 비교해주는 함수인 shallowEqual을 두 번째 파라미터에 넣기
+
+```js
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+
+function CounterContainer() {
+  const { number, diff } = useSelector(
+    state => ({
+      number: state.counter.number,
+      diff: state.counter.diff,
+    }),
+    shallowEqual
+  );
+  ...
+```
+
+Counter가 렌더링 되지 않았음. 최적화!
+
+<img src="/posts/note/learn-redux/Pasted image 20220510205622.png" />
+
+주의할 점은 shallowEqual을 사용한다 해서 객체 안의 모든 값을 제대로 비교하진 않음. 얕게 비교하기 때문에 z 값만 바뀌었다면 감지해 내지 못함. 그렇기 때문에 리덕스에서 상태를 업데이트 할 때 불변성을 유지해 줘야 함.
+
+```js
+const obj = {
+  a: {
+    x: 1,
+    y: 2,
+    z: 3,
+  },
+  b: 1,
+  c: [1, 2, 3, 4],
+}
+
+// 이런 식으로 작동
+(left, right) => left.a === right.a && left.b === right.b && left.c === right.c
+```
+
+둘 다 성능은 거기서 거기지만 빠뜨리지 않기! 업데이트가 많이 일어나는 것도 아니고 업데이트할 때 무거운 리렌더링이 아니라면 사실상 최적화하지 않아도 됨. 모든 걸 최적화하지는 않고, 개발 과정에서 컴포넌트의 크기가 크거나 즉 내용이 많거나 또는 리스트를 렌더링 하는데 리스트 안에 많은 항목이 있거나 렌더링이 빈번하게 일어난다면 최적화에 대해 고민하기.
+
+### 11. connect, HOC 함수 소개
+
+connect라는 HOC 함수를 통해 클래스형 컴포넌트에서 리덕스 연동하기. 사실 쓸 일 별로 없음. 어쩔 수 없이 클래스형 컴포넌트를 사용하는 경우 사용
+
+이 함수는 Props를 통해 리덕스의 상태 또는 액션을 디스패치하는 함수를 받아옴. 2019년 중슨쯤 useSelecor, useDispatch가 소개된 이후에는 더 이상 쓸 이유가 없지만 알아두기
+
+#### hoc란?
+
+재사용되는 값, 함수를 Props로 받아올 수 있게 해주는 옛날 패턴으로, react router의 withRouter에서도 라우트가 아닌 컴포넌트에서도 history, match, location을 사용할 수 있는데 그것도 하나의 hoc임. 이전엔 많이 사용됐는데 이젠 그런 패턴들이 훅스로 대체될 수 있어서 사용되지 않음.
+
+```js
+function withSomething(WrappedComponent) {
+  return (props) => <WrappedComponent {...props} something="Something" />;
+}
+
+const MyComponent = ({ something }) => {
+  return <div>{something}</div>;
+};
+
+const EnhancedMyComponent = withSomething(MyComponent);
+
+const App = () => <EnhancedMyComponent />;
+```
+
+connect를 꼭 클래스형 컴포넌트에서 쓸 필요는 없음.
