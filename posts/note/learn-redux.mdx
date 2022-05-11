@@ -90,15 +90,15 @@ function counter(state, action) {
 
 현재 앱의 상태와 리듀서가 들어있고, 하나의 앱에선 하나의 스토어만 만든다는 규칙이 있음. 스토어 안에는 추가적으로 몇 가지 내장함수들이 들어있음
 
-- 디스패치 (dispatch)
+##### 디스패치 (dispatch)
 
 액션을 발생시킴. 액션을 스토어에게 전달한다. 액션 객체를 만들어서 파라미터에 넣어 호출. 리듀서에게 전달이 돼서 그 함수에서 새로운 상태를 반환해 주면 스토어의 상태가 새로워짐
 
-```
-dispatch({ type: 'INCREASE' })
+```js
+dispatch({ type: 'INCREASE' });
 ```
 
-- 구독 (subscribe)
+##### 구독 (subscribe)
 
 액션이 발생되서 상태가 업데이트됐을 때 특정 함수를 호출. 스토어의 내장 함수 중 하나로, 호출할 때 파라미터로 특정 함수로 넣으면 액션이 디스패치 될 때마다 우리가 설정한 함수가 호출됨. 그러면 스토어의 상태가 업데이트될 때마다 특정 함수를 호출할 수 있다는 것. 리액트 리덕스 라이브러리에서 제공하는 훅으로 스토어 상태가 업데이트되면 컴포넌트가 리랜더링 작업을 대신 처리할 수 있음.
 
@@ -210,7 +210,7 @@ window.store = store;
 window.unsubscribe = unsubscribe;
 ```
 
-특정 액션이 디스패치되면 스토어의 상태가 업데이트되고, 상태가 업데이트되면 우리가 구독했던 함수가 호출됨. unsubscribe 하면 호출이 되지 않음. 우리가 앞으로 리액트에서 리덕스를 사용할 때는 subscribe 함수는 사용하지 않음. 그리고 getState도 직접적으로 사용하는 일은 미들웨어말고는 없음. helper hooks를 사용해 리덕스와 리액틀를 연동
+특정 액션이 디스패치되면 스토어의 상태가 업데이트되고, 상태가 업데이트되면 우리가 구독했던 함수가 호출됨. unsubscribe 하면 호출이 되지 않음. 우리가 앞으로 리액트에서 리덕스를 사용할 때는 subscribe 함수는 사용하지 않음. 그리고 getState도 직접적으로 사용하는 일은 미들웨어말고는 없음. helper hooks를 사용해 리덕스와 리액트를 연동
 
 ### 04. 리덕스 모듈 만들기
 
@@ -459,7 +459,7 @@ export default function Todos({ todos, onCreate, onToggle }) {
 
 ### 08. 할 일 목록 구현 - 컨테이너 컴포넌트 만들기
 
-import 자동완성 : Ctrl + Space
+자동완성 : Ctrl + Space
 
 ```js
 // src/containers/TodosContainer.jsx
