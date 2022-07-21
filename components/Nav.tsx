@@ -1,7 +1,6 @@
 import cn from 'classnames';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 import navlinks from '../data/navlinks';
 import MobileMenu from './MobileMenu';

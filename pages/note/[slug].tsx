@@ -1,7 +1,7 @@
-import { InferGetStaticPropsType } from "next";
-import { useMDXComponent } from "next-contentlayer/hooks";
+import { InferGetStaticPropsType } from 'next';
+import { useMDXComponent } from 'next-contentlayer/hooks';
 
-import Container from "components/Container";
+import Container from 'components/Container';
 import { allNotes } from 'contentlayer/generated';
 
 const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -29,18 +29,18 @@ const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
 export const getStaticPaths = async () => {
   return {
-    paths: allNotes.map(p => ({ params: { slug: p.slug } })),
+    paths: allNotes.map((p) => ({ params: { slug: p.slug } })),
     fallback: false,
-  }
-}
+  };
+};
 
 export const getStaticProps = async ({ params }) => {
-  const post = allNotes.find(p => p.slug === params.slug)
+  const post = allNotes.find((p) => p.slug === params.slug);
   return {
     props: {
       post,
     },
-  }
-}
+  };
+};
 
 export default Post;

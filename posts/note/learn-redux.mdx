@@ -210,7 +210,7 @@ window.store = store;
 window.unsubscribe = unsubscribe;
 ```
 
-특정 액션이 디스패치되면 스토어의 상태가 업데이트되고, 상태가 업데이트되면 우리가 구독했던 함수가 호출됨. unsubscribe 하면 호출이 되지 않음. 우리가 앞으로 리액트에서 리덕스를 사용할 때는 subscribe 함수는 사용하지 않음. 그리고 getState도 직접적으로 사용하는 일은 미들웨어말고는 없음. helper hooks를 사용해 리덕스와 리액트를 연동
+특정 액션이 디스패치되면 스토어의 상태가 업데이트되고, 상태가 업데이트되면 우리가 구독했던 함수가 호출됨. unsubscribe 하면 호출이 되지 않음. 우리가 앞으로 리액트에서 리덕스를 사용할 때는 subscribe 함수는 사용하지 않음. 그리고 getState도 직접적으로 사용하는 일은 미들웨어 말고는 없음. helper hooks를 사용해 리덕스와 리액트를 연동
 
 ### 04. 리덕스 모듈 만들기
 
@@ -301,13 +301,12 @@ function Counter({ number, diff, onIncrease, onDecrease, onSetDiff }) {
 
   return (
     <>
-            <h1>{number}</h1>     {' '}
+      <h1>{number}</h1>
       <div>
-                <input type="number" value={diff} onChange={onChange} />       {' '}
-        <button onClick={onIncrease}>+</button>       {' '}
-        <button onClick={onDecrease}>-</button>     {' '}
+        <input type="number" value={diff} onChange={onChange} /> 
+        <button onClick={onIncrease}>+</button> 
+        <button onClick={onDecrease}>-</button>
       </div>
-         {' '}
     </>
   );
 }

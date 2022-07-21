@@ -8,20 +8,21 @@ import RecentPosts from '../components/RecentPosts';
 import { allBlogs, allNotes } from 'contentlayer/generated';
 
 const Home = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { theme } = useTheme();
+  const { theme = 'light' } = useTheme();
 
   return (
     <Container>
       <div className={`my-5 w-full select-none`}>
         <div className={`relative`}>
           <Image
-            src={`/home/${theme === 'light' ? 'light' : 'dark'}.jpg`}
+            src={`/home/${theme}.jpg`}
             alt="대표 이미지"
             width={`100%`}
             height={35}
             layout={`responsive`}
             objectFit="cover"
             className={`absolute top-0 left-0 rounded-3xl`}
+            priority
           />
           <div
             className={`absolute top-0 left-0 w-full h-full flex flex-col items-center align-middle justify-center`}
