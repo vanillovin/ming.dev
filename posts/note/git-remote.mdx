@@ -1,11 +1,13 @@
 ---
-title: "[Git] 깃허브 사용하기"
+title: '[Git] 깃허브 사용하기'
 date: 2022-04-23
 description: 드림코딩 Git 마스터 과정 강의 매일 한 챕터씩!
 ---
 
 ## 깃허브 사용하기 💻
+
 ### 깃허브의 필요성
+
 나의 local 환경에서 나의 컴퓨터에서만 git repository를 생성하고 history를 간직한다면
 내 PC에서 문제가 생기거나 다른 환경에서 작업을 하고 싶을 때 repository에 접근이 불가능함.
 영원히 나의 history를 잃게 되는 것. 이것을 방지하고 다른 사람들과의 협업을 위해서
@@ -23,10 +25,11 @@ server에 업데이트된 내용을 나의 local에 업데이트하고 싶다면
 
 이렇게 git을 이용해서 나의 프로젝트 버전을 관리할 수도 있고 github와 같은 server를 이용해서
 나의 local git repository를 server에 host 해서 다른 개발자들과 협업해나갈 수도 있음.
-이렇게 다수의 개발자가 함께 현업해 나가는 경우에 workflow를 이용하면 됨. 
+이렇게 다수의 개발자가 함께 현업해 나가는 경우에 workflow를 이용하면 됨.
 만약 나에게 접근 권한이 없고 오픈소스 프로젝트라면 어떻게 할 수 있을까?
 
 ### 오픈소스 프로젝트 참여하기 🚀
+
 오픈소스 프로젝트가 있는데 나에게 정말 괜찮은 아이디어가 있는데 이럴 경우엔 나에게 그 repository에
 대해서 접근과 쓰기 권한이 없으므로 그 repository를 fork 해올 수 있음. fork라는 말은 기존의 repository에
 바로 내가 commit 해 나가는 것이 아니라 나의 repository에 동일하게 복사해서 가지고 오는 것을 말함.
@@ -42,8 +45,10 @@ sync를 해서 최신 상태를 유지한 다음에 merge를 할 수 있음.
 <img alt="Forking Workflow" src="/posts/note/git-remote/Forking Workflow.png" />
 
 ### 깃허브 프로젝트를 내 PC에 가지고 오기
+
 깃허브 저장소에서 초록색 Code 버튼을 누르고 git을 cloone 할 수 있는 주소를 복사하고 terminal을 열어서
 작업 중인 project 안에서 아래 명령어로 clone 하면 원격에서 받아오고 새로운 폴더가 생성됨
+
 ```bash
 // 보통은 repository에 있는 이름 그대로 새로운 폴더가 생성
 $ git clone https://github.com/vanillogin/git-test.git
@@ -55,15 +60,18 @@ $ git clone https://github.com/vanillovin/git-test.git test-project
 server에 관련된 정보를 확인 하려면 git remote 라는 명령어를 이용할 수 있는데,
 기본적으로 server에 있는 아이의 이름은 origin으로 설정 되어 있고 -v 옵션을 이요하면
 origin이 어떤 걸 가리키고 있는지 정확한 정보들을 확인할 수 있음.
+
 <img alt="git remote" src="/posts/note/git-remote/git-remote-bash.jpg" />
 
 현재 있는 폴더에서 다른 github 링클르 추가 하고 싶다면, 나중에 오픈소스 프로젝트에 참가할 때
 내가 fork한 repository에서는 다수의 origin을 설정할 수 있음. 동일한 링크는 노!
+
 ```bash
 $ git remote add server github-link
 ```
 
 show라는 명령어로 각각 해당하는 정보들을 확인 가능
+
 ```bash
 // origin에 관련된 정보 자세히
 $ git remote show origin
@@ -72,7 +80,9 @@ $ git remote show server
 ```
 
 ### 나의 커밋을 서버에 저장하기
+
 새로운 commit을 만들어서 server에 업데이트 push 하기!
+
 ```
 // add.txt 파일 생성
 $ echo add > add.txt
@@ -83,11 +93,12 @@ $ git commit -m "Add new file"
 origin/main이 두 번째를 가리키고 있는데, 그 말은 github server에는 두 번째 commit까지만 들어가 있고
 지금 현재 local에 있는 HEAD는 세 번째를 가리키고 있기 때문에 local이 origin 보다 commit이 하나 더
 앞서가 있는 것을 확인할 수 있음. git push로 local history를 server에 업데이트 가능
+
 ```bash
 $ git hist
 * [2022-04-28] [83adbc3] | Add new file {{vanillovin}}  (HEAD -> master)
 * [2022-04-28] [95a3cb5] | Update README.md {{vanillovin}}  (origin/master, origin/HEAD)
-* [2022-04-28] [8edd792] | Initial commit {{vanillovin}} 
+* [2022-04-28] [8edd792] | Initial commit {{vanillovin}}
 
 $ git push
 
@@ -98,6 +109,7 @@ $ git hist
 ```
 
 ### 푸쉬를 간편하게 하기 SSH
+
 server에 push를 할 때마다 아이디와 비밀번호를 입력하는 것은 굉장히 번거로움.
 간편하고 자동적이고 안전하게 하기 위해 SSH key를 이용할 수 있음! SSH는 secure shell protocol 약자로
 바로 우리가 사용하고 있는 terminal과 server 간에 안전하게 아이디와 비밀번호를 유지해 주는 방법임.
@@ -111,8 +123,8 @@ public key를 생성한 다음 복사하고 Settings-SSH key-New SSH key 클릭�
 Title 같은 경우 집에 있는 컴퓨터에서 작업한다면 Name - Home 원하는 대로 지정하고
 복사한 Key 붙이고 Add 버튼 누르기.
 
-
 ### Push 심화 내용
+
 github 페이지에서 해당하는 repository에 들어온 다음 commit history에서 전체적인 commit 들을 확인할 수 있고
 commit 버튼을 누르면 각각 commit에서 어떤 내용들이 변경되었는지 확인과 해당 commit에 코멘트도 남길 수 있음.
 만약에 server에 다른 commit이 있는 경우에 즉 서버에 commit이 한 단계 더 앞서 나가 있는 경우엔?
@@ -120,6 +132,7 @@ commit 버튼을 누르면 각각 commit에서 어떤 내용들이 변경되었�
 github에서 수정한 다음 커밋을 만들고 다시 terminal에서 git history를 보면 아직 server와 sync를 하지 않았기 때문에
 내 local에서는 총 세 가지만 있는 걸 확인할 수 있음. 이 상태에서 다시 add 파일을 수정하고 commit, push를 하게 되면
 server에서 push를 reject함
+
 ```bash
 $ echo edited in local >> add.txt
 $ git commit -am "Edited by Local"
@@ -135,6 +148,7 @@ $ git hist
 
 업데이트가 거절됨. 왜냐면 remote에 server에 네가 local에 가지고 있는 변경사항을 가지고 있기 때문이다.
 라고 나옴.
+
 ```bash
 $ git push
 To https://github.com/vanillovin/git-test.git
@@ -150,6 +164,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 server에 있는 내용은 다 거짓말이고 내 local에 있는 게 진실이야 내 거를 무조건 받아줘! 해서
 force 옵션으로 push 하고 깃허브 페이지를 확인하면 방금 server에서 작업한 내용은 지워지고
 local에서 push 한 commit들의 history로 대체된 것을 확인할 수 있음.
+
 ```bash
 git push -f
 ```
@@ -160,12 +175,14 @@ push를 하는 게 맞음. 간혹 기존의 git history를 rebase를 이용해 �
 부득이하게 force라는 옵션을 이용해서 push를 해야 함.
 
 ### 이미 만들어진 프로젝트 깃허브에 추가하기
+
 앞에선 github에 새로운 repository를 만들어 나의 local로 가져왔고
 내 local에만 있는 이미 만들고 있는 프로젝트를 github에 올리고 싶다면
 
 먼저 hithub 페이지에서 새로운 repository를 만들기.
 새로운 repository라면 우리 프로젝트 안에서 `git init` 명령어로 git을 초기화한 다음 remote라고 추가할 수 있고,
 기존에 존재하는 프로젝트는 두 번째 옵션을 이용해서 `git remote origin repository-link`
+
 ```bash
 USER@DESKTOP-E2FHBN7 MINGW64 ~/projects/git/git-undo (master)
 $ git remote
@@ -177,9 +194,11 @@ origin
 ```
 
 ### fetch vs pull 차이점
+
 git에서 local과 server와 함께 연동해서 작업하는 경우에는 나의 local에서는 server에 있는
-branch를 origin이라고 붙여서 표기를 하게됨. 
-```←↑↓
+branch를 origin이라고 붙여서 표기를 하게됨.
+
+```
 #local                #server
 origin/master
       ↓
@@ -187,10 +206,12 @@ origin/master
       ↑                       ↑
    master                   master
 ```
-여기에서 server에 새로운 commit이 발생했다면 fetch를 이용하는 경우에는 
+
+여기에서 server에 새로운 commit이 발생했다면 fetch를 이용하는 경우에는
 server에 있는 git history를 받아와서 나의 git history를 업데이트 하게 됨.
 그래서 우리 origin master가 이제는 C를 가리키고 있음
-```←↑↓
+
+```
 #local                #server
     origin/master
           ↓
@@ -206,7 +227,8 @@ HEAD는 그대로 유지되는 걸 볼 수 있음. 즉 history는 이제 C라는
 반대로 pull이라는 명령어는 server에 있는 history를 가지고 오면서 나의 local에 있는 내용을 함께
 merge를 하게 됨. 그래서 C를 받음과 동시에 origin master 그리고 나의 master가
 동시에 C를 가리키고 있는 것을 확인할 수 있음.
-```←↑↓
+
+```
 #local                #server
     origin/master
           ↓
@@ -216,42 +238,48 @@ merge를 하게 됨. 그래서 C를 받음과 동시에 origin master 그리고 
 ```
 
 ### ferch 심화
+
 server에서 새로운 commit을 만들고 다시 terminal로 돌아와서 git history를 보면
 현재 local에 네 가지의 commit이 있음.
+
 ```
 $ git hist
 * [2022-04-28] [9a7b6f1] | Edited by Local {{vanillovin}}  (HEAD -> master)
-* [2022-04-28] [83adbc3] | Add new file {{vanillovin}} 
-* [2022-04-28] [95a3cb5] | Update README.md {{vanillovin}} 
-* [2022-04-28] [8edd792] | Initial commit {{vanillovin}} 
+* [2022-04-28] [83adbc3] | Add new file {{vanillovin}}
+* [2022-04-28] [95a3cb5] | Update README.md {{vanillovin}}
+* [2022-04-28] [8edd792] | Initial commit {{vanillovin}}
 ```
 
 git fetch라는 명령어를 이용하면 server에 있는 history를 가지고 옴. erver에 있는,
 origin에 있는 master과 origin에 있는 HEAD는 여기 최신 commit을 가리키고 있지만
 나의 local HEAD는 여전히 아까와 마찬가지로 네 번째 commit을 가리키고 있음
+
 ```
 $ git fetch
 
 $ git hist
 * [2022-04-28] [8259127] | Update add.txt {{vanillovin}}  (origin/master, origin/HEAD)
 * [2022-04-28] [9a7b6f1] | Edited by Local {{vanillovin}}  (HEAD -> master)
-* [2022-04-28] [83adbc3] | Add new file {{vanillovin}} 
-* [2022-04-28] [95a3cb5] | Update README.md {{vanillovin}} 
-* [2022-04-28] [8edd792] | Initial commit {{vanillovin}} 
+* [2022-04-28] [83adbc3] | Add new file {{vanillovin}}
+* [2022-04-28] [95a3cb5] | Update README.md {{vanillovin}}
+* [2022-04-28] [8edd792] | Initial commit {{vanillovin}}
 ```
 
-그래서 내가 현재 작업하고 있는 HEAD는 그대로 유지하면서 server에 업데이트된 history 정보만 가지고 올 때 
+그래서 내가 현재 작업하고 있는 HEAD는 그대로 유지하면서 server에 업데이트된 history 정보만 가지고 올 때
 git fetch를 이용할 수 있음. 그리고 git fetch 다음에 origin과 같은 server에 이름을 명시해서 작성도 가능
+
 ```bash
 $ git fetch server
 ```
 
 또는 server의 여러 가지의 branch가 있다면 특정한 branch만 branch에 해당하는 정보만 가지고 올 수도 있음
+
 ```bash
 $ git fetch origin master
 ```
 
 ### pull 심화
+
 fetch 같은 경우에는 내가 server에 있는 history 정보를 업데이트해서 server에서 어떤 일들이
 지금 발생하고 있는지, 누가 어떤 일을 했는지 황긴하고 싶은 경우에 많이 쓰임.
 
@@ -259,8 +287,9 @@ fetch 같은 경우에는 내가 server에 있는 history 정보를 업데이트
 git pull이라는 명령어를 이용. 만약 server에 있는 새로운 commit이 단순히 하나 앞서가 있는 경우엔
 fast forward라는 merge를 이용해서 받아옴
 
-그래서 내 local에 있는 HEAD들이 동일한 commit을 가리키고 있기 때문에 내 local과 server는 
+그래서 내 local에 있는 HEAD들이 동일한 commit을 가리키고 있기 때문에 내 local과 server는
 synchronized 동기화가 잘 되었구나! 내 local에 있는 정보가 최신이구나! 라는 걸 확인할 수 있음.
+
 ```bash
 $ git hist
 * [2022-04-28] [5a3e844] | Update add.txt {{vanillovin}}  (HEAD -> main, server/main, origin/main, origin/HEAD)
@@ -268,16 +297,17 @@ $ git hist
 ```
 
 local과 server에서 각각 동일한 파일을 수정했을 때 서로 새로운 commit이 있는 경우라면 어떻게 될까?
-이것은 현업에서 현업을 할 때 흔하게 발생할 수 있는 경우임. 
+이것은 현업에서 현업을 할 때 흔하게 발생할 수 있는 경우임.
 
 local에서 local change라는 새로운 commit이 있고 server에는 remote라는 commit이 있는 상황.
 그리고 이 두 가지의 commit 모두 다 동일한 add 파일을 수정함. 이 상태에서 git pull 명령어를 이용하면
 Merge conflict이 발생함
 
-이처럼 Merge conflict는 다른 branch들 사이든지 server와 local 사이든지 항상 동일한 파일 수정하는 경우에 
+이처럼 Merge conflict는 다른 branch들 사이든지 server와 local 사이든지 항상 동일한 파일 수정하는 경우에
 발생할 수 있음. 해결할 수 있는 방법은 mergetool을 이용하는 것!
 
 그냥 pull 명령어를 이용하면 기본적으로는 merge가 발생이 되는데, merge가 싫다면 rebase를 사용할 수 있음
+
 ```bash
 // 커밋을 했다면 이전 상태로 돌리기
 $ git reflog
@@ -296,12 +326,13 @@ $ git mergetool
 server에서 받아온 commit은 그대로 유지되는 걸 확인할 수 있음.
 
 ### 오픈소스 프로젝트 참가 법
+
 오픈소스 프로젝트에서 버그들을 발견하거나 멋진 아이디어가 있는 경우!
-나는 이 프로젝트의 일원이 아니기 때문에 바로 push를 할 수 없음. 이런 경우라면 
+나는 이 프로젝트의 일원이 아니기 때문에 바로 push를 할 수 없음. 이런 경우라면
 fork 버튼을 클릭해서 forking 해서 SSH나 https를 선택해서 주소를 복사하고
 terminal에 git glone 하고 복사한 걸 붙여서 해당 프로젝트를 클론하기.
 
-이제 새로운 branch를 만들고 `git switch -C fix` 만들면서 바로 전환 가능한 
+이제 새로운 branch를 만들고 `git switch -C fix` 만들면서 바로 전환 가능한
 -C option을 이용해 fix라는 branch를 만들고, 버그를 없애고 나의 참신한 아이디어를 넣는 등
 원하는 부분을 수정하기.
 
@@ -309,7 +340,7 @@ terminal에 git glone 하고 복사한 걸 붙여서 해당 프로젝트를 클�
 프로젝트 코드 안에 들어있는 오타나 코멘트를 수정하는 일부터 시작하면서 자신감을 쌓고
 그 뒤에 작은 이슈 먼저 해결하면서 조금씩 기여하는 걸 추천함
 
-이렇게 저장하고 다시 `git commit -am "Fix"` -> `git push origin fix` 
+이렇게 저장하고 다시 `git commit -am "Fix"` -> `git push origin fix`
 branch 업로드하면 프로젝트 링크에 접속 시 pull request를 만들 수 있는 작은 배너가 생성돼있음.
 마음에 들면 버튼을 누르고 fix branch를 merge 하기 위해 pull request를 만들기.
 
